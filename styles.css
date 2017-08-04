@@ -1,25 +1,27 @@
 ﻿body {
-    box-sizing: border-box;
-    margin: 0;
+    margin: 0 auto;
+    max-width: 50em;
     font-family: "Helvetica", "Arial", sans-serif;
-    display: flex;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    flex-direction: column;
+    line-height: 1.5;
+    padding: 4em 1em;
+    color: #555;
 }
 
 h1, h2, h3, strong {
-    /*font-family: wf_segoe-ui_light,"Segoe UI Light","Segoe WP Light",wf_segoe-ui_normal,"Segoe UI",Segoe,"Segoe WP",Tahoma,Verdana,Arial,sans-serif;*/
     color: #333;
 }
 
 h2 {
-    /*font-size: larger;*/
+    margin-top: 1em;
+    padding-top: 1em;
 }
 
 h3 {
     font-size: medium;
+}
+
+a {
+    color: seagreen;
 }
 
 p a:link, p a:visited {
