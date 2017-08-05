@@ -22,12 +22,12 @@
     <h2 id="advantages">Binary log advantages</h2>
     <p>
         <ul>
-            <li>Preserves the exact events in order they happened during the build. You can replay a binary log into other loggers to reconstruct full text logs. Pass the .binlog file to MSBuild instead of a project/solution to replay the log.</li>
-            <li>Binary log adds far less overhead to the build, and can make builds significantly faster if other logs are disabled. They can be reconstructed after the build anyway if needed.</li>
+            <li>Replayability - preserves the exact events in order they happened during the build. You can replay a binary log into other loggers to reconstruct full text logs. Pass the .binlog file to MSBuild instead of a project/solution to replay the log.</li>
+            <li>Completeness - binary logs capture more information than even the most diagnostic-level text logs (the binary logger turns on various MSBuild switches to output more information, such as task inputs and target outputs)</li>
+            <li>Faster builds - binary logger adds far less overhead to the build, and can make builds significantly faster if other logs are disabled. They can be reconstructed later anyway if needed.</li>
+            <li>Smaller disk size - a binary log is much smaller in size than a corresponding text log (10-20x or more). This can result in significant storage savings on CI servers.</li>
             <li>Text logs (especially from multi-processor builds) can become unwieldy, intertwined and hard to read.</li>
-            <li>A binary log is much smaller in size than a corresponding text log (10-20x or more). This can result in significant storage savings on CI servers.</li>
-            <li>Binary logs capture more information than even the most diagnostic-level text logs (the binary logger turns on various MSBuild switches to output more information, such as task inputs and target outputs)</li>
-            <li>All information is easily accessible programmatically for tools such as analyzers (whereas you need to parse text logs yourself and it's hard without clearly defined structure)</li>
+            <li>All information is easily accessible programmatically for tools such as analyzers (whereas you need to parse text logs yourself and it's hard without clearly defined structure) A .NET API is available to load and query binary logs.</li>
             <li>A binary log optionally embeds the source text of all project files and imported targets files used during the build, so it is possible to correlate log events with the source code. Preprocessed view (with all imports inlined) is available for each file (like /pp).</li>
         </ul>
     </p>
