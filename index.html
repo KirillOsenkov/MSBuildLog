@@ -14,11 +14,23 @@
         <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/releases/download/v1.1.142/MSBuildStructuredLogSetup.exe" class="bigButton">Download MSBuild Structured Log Viewer</a>
     </div>
     <h2 id="usingbl">Using MSBuild.exe /bl to record a binary log</h2>
-    <p>To create a <span class="inlineCode">.binlog</span> file during a build just pass <span class="inlineCode">/bl</span> to MSBuild:</p>
+    <p>To record a <span class="inlineCode">.binlog</span> file just pass <span class="inlineCode">/bl</span> to MSBuild:</p>
     <img src="BinLogFromCommandLine.png" width="504" height="63" />
     <p>Double-click the <span class="inlineCode">.binlog</span> file to open it in MSBuild Structured Log Viewer:</p>
     <img src="Screenshot1.png" width="100%" />
     <a href="https://github.com/Microsoft/msbuild/wiki/Binary-Log" target="_blank">Read more about the new MSBuild binary log format (*.binlog)</a>
+    <h2 id="advantages">Binary log advantages</h2>
+    <p>
+        <ul>
+            <li>Preserves the exact events in order they happened during the build. You can replay a binary log into other loggers to reconstruct full text logs. Pass the .binlog file to MSBuild instead of a project/solution to replay the log.</li>
+            <li>Binary log adds far less overhead to the build, and can make builds significantly faster if other logs are disabled. They can be reconstructed after the build anyway if needed.</li>
+            <li>Text logs (especially from multi-processor builds) can become unwieldy, intertwined and hard to read.</li>
+            <li>A binary log is much smaller in size than a corresponding text log (10-20x or more). This can result in significant storage savings on CI servers.</li>
+            <li>Binary logs capture more information than even the most diagnostic-level text logs (the binary logger turns on various MSBuild switches to output more information, such as task inputs and target outputs)</li>
+            <li>All information is easily accessible programmatically for tools such as analyzers (whereas you need to parse text logs yourself and it's hard without clearly defined structure)</li>
+            <li>A binary log optionally embeds the source text of all project files and imported targets files used during the build, so it is possible to correlate log events with the source code. Preprocessed view (with all imports inlined) is available for each file (like /pp).</li>
+        </ul>
+    </p>
     <h2 id="usingapp">Using the viewer to build projects and solutions</h2>
     <p>The MSBuild Structured Log Viewer can build projects and solutions or open existing log files:</p>
     <img src="Screenshot2.png" width="70%" />
@@ -71,6 +83,7 @@
 
     <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
 
+    <h2 id="sourcecode">Source code on GitHub</h2>
     <p>The MSBuild Structured Log Viewer project is open-source on GitHub at: <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog" target="_blank">https://github.com/KirillOsenkov/MSBuildStructuredLog</a></p>
     <p>This webpage is also open-source at: <a href="https://github.com/KirillOsenkov/MSBuildLog" target="_blank">https://github.com/KirillOsenkov/MSBuildLog</a></p>
 </body>
