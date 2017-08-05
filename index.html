@@ -13,12 +13,14 @@
     <div class="buttonHost">
         <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/releases/download/v1.1.142/MSBuildStructuredLogSetup.exe" class="bigButton">Download MSBuild Structured Log Viewer</a>
     </div>
+
     <h2 id="usingbl">Using MSBuild.exe /bl to record a binary log</h2>
     <p>To record a <span class="inlineCode">.binlog</span> file just pass <span class="inlineCode">/bl</span> to MSBuild:</p>
     <img src="BinLogFromCommandLine.png" width="504" height="63" />
     <p>Double-click the <span class="inlineCode">.binlog</span> file to open it in MSBuild Structured Log Viewer:</p>
     <img src="Screenshot1.png" width="100%" />
     <a href="https://github.com/Microsoft/msbuild/wiki/Binary-Log" target="_blank">Read more about the new MSBuild binary log format (*.binlog)</a>
+
     <h2 id="advantages">Binary log advantages</h2>
     <p>
         <ul>
@@ -31,9 +33,13 @@
             <li>A binary log optionally embeds the source text of all project files and imported targets files used during the build, so it is possible to correlate log events with the source code. Preprocessed view (with all imports inlined) is available for each file (like /pp).</li>
         </ul>
     </p>
-    <h2 id="usingapp">Using the viewer to build projects and solutions</h2>
+
+    <h2 id="features">Viewer Features</h2>
     <p>The MSBuild Structured Log Viewer can build projects and solutions or open existing log files:</p>
     <img src="Screenshot2.png" width="70%" />
+    <p>Leverage the source code of projects and targets embedded in the log file:</p>
+    <img src="ViewerOverview3.gif" width="100%" />
+
     <h2 id="commandline">Command-line help for the /bl switch</h2>
     <p>See MSBuild command-line help <span class="inlineCode">msbuild /?</span> for more information on the <span class="inlineCode">/bl</span> switch. The switch is available starting with MSBuild 15.3 (Visual Studio 2017 Update 3 or newer).</p>
     <div class="code">
