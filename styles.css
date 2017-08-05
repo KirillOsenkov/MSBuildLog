@@ -24,10 +24,6 @@ a {
     color: seagreen;
 }
 
-p a:link, p a:visited {
-    color: #ad8dd9;
-}
-
 table {
     border-collapse: collapse;
     width: 100%;
