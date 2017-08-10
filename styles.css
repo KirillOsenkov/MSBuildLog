@@ -23,6 +23,13 @@ h3 {
 
 a {
     color: seagreen;
+    background-color: #F8FFF8;
+}
+
+.accent {
+    color: #377;
+    background-color: #F0F8FF;
+    font-weight: bold;
 }
 
 table {
