@@ -11,7 +11,7 @@
 <body>
     <h1>MSBuild Binary and Structured Log Viewer</h1>
     <div class="buttonHost">
-        <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/releases/download/v1.1.142/MSBuildStructuredLogSetup.exe" class="bigButton">Download&nbsp;MSBuild&nbsp;Structured&nbsp;Log&nbsp;Viewer</a>
+        <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/releases/download/v1.1.153/MSBuildStructuredLogSetup.exe" class="bigButton">Download&nbsp;MSBuild&nbsp;Structured&nbsp;Log&nbsp;Viewer</a>
     </div>
 
     <h2 id="usingbl">Using MSBuild.exe /bl to record a binary log</h2>
@@ -19,6 +19,8 @@
     <img src="BinLogFromCommandLine.png" width="70%" />
     <p>Double-click the <span class="inlineCode">.binlog</span> file to open it in MSBuild Structured Log Viewer:</p>
     <img src="Screenshot1.png" width="100%" />
+
+    <p>You can pass a <span class="inlineCode">.binlog</span> file to MSBuild to replay it to other loggers, as if a real build was happening. This allows you to reconstruct a text log of any verbosity given the <span class="inlineCode">.binlog</span> file. Just pass the <span class="inlineCode">.binlog</span> to MSBuild.exe instead of a project/solution and specify additional loggers (e.g. using <span class="inlineCode">/flp:v=diag</span>) to receive the events.</p>
 
     <h2 id="advantages">Binary log advantages</h2>
     <p>
@@ -39,6 +41,17 @@
     <img src="Screenshot2.png" width="70%" />
     <p>Leverage the source code of projects and targets embedded in the log file:</p>
     <img src="ViewerOverview3.gif" width="100%" />
+
+    <p>The viewer supports three file formats:</p>
+    <ol>
+        <li><span class="inlineCode">*.binlog</span> (official MSBuild binary log format, produced by <span class="inlineCode">msbuild.exe /bl</span></li>
+        <li><span class="inlineCode">*.buildlog</span> (when you Save As... in the viewer)</li>
+        <li><span class="inlineCode">*.xml</span> (for large human-readable XML logs)</li>
+    </ol>
+
+    <p>The viewer can read all 3 formats and can save to either <span class="inlineCode">*.buildlog</span> or <span class="inlineCode">*.xml</span>.</p>
+
+    <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/blob/master/README.md#features" target="_blank">See here for the list of viewer features</a>
 
     <h2 id="commandline">Command-line help for the /bl switch</h2>
     <p>See MSBuild command-line help <span class="inlineCode">msbuild /?</span> for more information on the <span class="inlineCode">/bl</span> switch. The switch is available starting with MSBuild 15.3 (Visual Studio 2017 Update 3 or newer).</p>
@@ -86,6 +99,14 @@
                        /bl:..\..\custom.binlog
                        /binaryLogger
     </div>
+
+    <h2>Recording a binary log with older versions of MSBuild</h2>
+    <p>The built-in <span class="inlineCode">/bl</span> switch was only introduced in MSBuild 15.3 (Visual Studio 2017 Update 3). However there is a way to record a binary log with previous versions of MSBuild as well. You can attach the logger to any MSBuild-based build using the logger library: <span class="inlineCode">StructuredLogger.dll</span>. It is available in a NuGet package:</p>
+    <a href="https://www.nuget.org/packages/Microsoft.Build.Logging.StructuredLogger" target="_blank">Microsoft.Build.Logging.StructuredLogger</a>
+    <p>Use a command-line such as this to pass the BinaryLogger to MSBuild:</p>
+    <div class="code">msbuild solution.sln /t:Rebuild /v:diag /noconlog /logger:BinaryLogger,%localappdata%\MSBuildStructuredLogViewer\app-1.1.153\BinaryLogger.dll;1.binlog</div>
+    <p>To use a portable version of the logger (e.g. with the dotnet msbuild command) you need a .NET Standard version of StructuredLogger.dll, not the .NET Framework (Desktop) version. Inside the NuGet package there is the lib\netstandard1.5\StructuredLogger.dll. Try passing that to dotnet build like this:</p>
+    <div class="code">dotnet msbuild Some.sln /v:diag /nologo /logger:BinaryLogger,"packages\Microsoft.Build.Logging.StructuredLogger.1.1.153\lib\netstandard1.5\StructuredLogger.dll";"C:\Users\SomeUser\Desktop\binarylog.binlog"</div>
 
     <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
 
