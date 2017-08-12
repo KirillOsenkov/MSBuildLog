@@ -100,7 +100,7 @@
                        /binaryLogger
     </div>
 
-    <h2>Recording a binary log with older versions of MSBuild</h2>
+    <h2 id="olderVersions">Recording a binary log with older versions of MSBuild</h2>
     <p>The built-in <span class="inlineCode">/bl</span> switch was only introduced in MSBuild 15.3 (Visual Studio 2017 Update 3). However there is a way to record a binary log with previous versions of MSBuild as well. You can attach the logger to any MSBuild-based build using the logger library: <span class="inlineCode">StructuredLogger.dll</span>. It is available in a NuGet package:</p>
     <a href="https://www.nuget.org/packages/Microsoft.Build.Logging.StructuredLogger" target="_blank">Microsoft.Build.Logging.StructuredLogger</a>
     <p>Use a command-line such as this to pass the BinaryLogger to MSBuild:</p>
