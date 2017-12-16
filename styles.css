@@ -26,6 +26,16 @@ a {
     background-color: #F8FFF8;
 }
 
+#header {
+    height: 60px;
+    background: #f9f7f7;
+    border-bottom: 1px solid #e8e8e8;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+}
+
 .accent {
     color: #377;
     background-color: #F0F8FF;
