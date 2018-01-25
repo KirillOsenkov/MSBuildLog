@@ -36,7 +36,8 @@
     <p>Double-click the <span class="inlineCode">.binlog</span> file to open it in MSBuild Structured Log Viewer:</p>
     <img src="Screenshot1.png" width="100%" />
 
-    <p>You can pass a <span class="inlineCode">.binlog</span> file to MSBuild to replay it to other loggers, as if a real build was happening. This allows you to reconstruct a text log of any verbosity given the <span class="inlineCode">.binlog</span> file. Just pass the <span class="inlineCode">.binlog</span> to MSBuild.exe instead of a project/solution and specify additional loggers (e.g. using <span class="inlineCode">/flp:v=diag</span>) to receive the events.</p>
+    <h2 id="replay">Replaying .binlog to reconstruct text logs</h2>
+    <p>You can pass a <span class="inlineCode">.binlog</span> file to MSBuild instead of a project/solution to replay it to other loggers, as if a real build was happening. This allows you to reconstruct a text log of any verbosity given the <span class="inlineCode">.binlog</span> file. Read more at: <a href="https://github.com/Microsoft/msbuild/wiki/Binary-Log#replaying-a-binary-log">https://github.com/Microsoft/msbuild/wiki/Binary-Log#replaying-a-binary-log</a></p>
 
     <h2 id="advantages">Binary log advantages</h2>
     <p>
