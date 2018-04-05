@@ -56,7 +56,7 @@
             <li><span class="accent">Faster builds</span> - less overhead than a text log, can make builds significantly faster if other logs are disabled. They can be reconstructed later anyway if needed.</li>
             <li><span class="accent">Smaller disk size</span> - a binary log is much smaller in size than a corresponding diagnostic-level text log (10-20x or more). This can result in significant storage savings on CI servers.</li>
             <li><span class="accent">Easier to read/analyze</span> - text logs (especially from multi-processor builds) can become unwieldy, intertwined and hard to read. The viewer allows to collapse unneeded sections, as well as intelligent search.</li>
-            <li><span class="accent">Programmatic access</span> - All information is easily accessible programmatically for tools such as analyzers (whereas you need to parse text logs yourself and it's hard without a clearly defined structure) A .NET API is available to load and query binary logs.</li>
+            <li><span class="accent">Programmatic access</span> - All information is easily accessible programmatically for tools such as analyzers (whereas you need to parse text logs yourself and it's hard without a clearly defined structure) A <a href="#api">.NET API</a> is available to load and query binary logs.</li>
             <li><span class="accent">Embedded source files</span> - optionally embed the source text of all project files and imported targets files used during the build, so it is possible to correlate log events with the source code. Preprocessed view (with all imports inlined) is available for each file (like <span class="inlineCode">/pp</span>).</li>
         </ul>
     </p>
@@ -138,6 +138,34 @@
     <h2 id="ide">Investigating IDE and design-time builds inside Visual Studio</h2>
     <p>Use the <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank">Project System Tools</a> Visual Studio extension to record binary logs of IDE and design-time builds.</p> 
     <p>See more information about design-time builds here:<br/><a href="https://github.com/dotnet/project-system/blob/master/docs/design-time-builds.md">https://github.com/dotnet/project-system/blob/master/docs/design-time-builds.md</a></p>
+
+    <h2 id="api">Reading MSBuild .binlogs programmatically</h2>
+    <p>Reference the <a href="https://www.nuget.org/packages/Microsoft.Build.Logging.StructuredLogger" target="_blank">Microsoft.Build.Logging.StructuredLogger</a> NuGet package and <a href="https://www.nuget.org/packages/Microsoft.Build.Framework/15.6.85" target="_blank">Microsoft.Build.Framework/15.6.85</a> and use this code to read the records from a .binlog:</p>
+    <div class="code">
+using System;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Logging;
+
+class BinLogReader
+{
+    static void Main(string[] args)
+    {
+        string binLogFilePath = @"C:\temp\test.binlog";
+
+        var binLogReader = new BinaryLogReplayEventSource();
+        foreach (var record in binLogReader.ReadRecords(binLogFilePath))
+        {
+            var buildEventArgs = record.Args;
+
+            // print command lines of all tool tasks such as Csc
+            if (buildEventArgs is TaskCommandLineEventArgs taskCommandLine)
+            {
+                Console.WriteLine(taskCommandLine.CommandLine);
+            }
+        }
+    }
+}
+    </div>
 
     <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
 
