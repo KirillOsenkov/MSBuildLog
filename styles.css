@@ -22,6 +22,8 @@ h2 {
 
 h3 {
     font-size: medium;
+    margin-top: 16px;
+    margin-bottom: 8px;
 }
 
 a {
@@ -37,6 +39,22 @@ a {
     left: 0px;
     top: 0px;
     right: 0px;
+    background-image: url('IconLarge.png');
+    background-attachment: local;
+    background-repeat: no-repeat;
+    background-position: 15px 5px;
+    background-origin: border-box;
+    background-size: 45px 50px;
+    -webkit-filter: drop-shadow(5px 5px 5px #ddd);
+    filter: drop-shadow(5px 5px 5px #ddd);
+}
+
+#header h1 {
+    margin-left: 75px;
+    font-size: 20px;
+    color: #808080;
+    font-family: "Segoe UI","Helvetica Neue","Helvetica",Arial,sans-serif;
+    font-weight: 500;
 }
 
 .accent {
@@ -118,7 +136,9 @@ td {
     color: #555;
 }
 
-#mainDocContent p {
+p {
+    -webkit-margin-before: 8px;
+    -webkit-margin-after: 8px;
     text-align: justify;
 }
 
@@ -136,7 +156,7 @@ td {
 
 .buttonHost {
     text-align: center;
-    margin: 32px auto;
+    margin: 62px auto;
 }
 
 #twoPanes {
@@ -280,7 +300,7 @@ td {
     .tocRoot {
         position: fixed;
         left: 0;
-        top: 40px;
+        top: 60px;
     }
 
     .tocRoot li {
