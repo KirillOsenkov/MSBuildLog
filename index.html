@@ -32,6 +32,7 @@
             <li><a href="#commandline">Command-line help for /bl</a></li>
             <li><a href="#olderVersions">Recording a binary log with old MSBuild</a></li>
             <li><a href="#ide">Investigating design-time builds</a></li>
+            <li><a href="#security">Security concerns</a></li>
             <li><a href="#api">Reading MSBuild .binlogs programmatically</a></li>
             <li><a href="#sourcecode">Source code on GitHub</a></li>
         </ul>
@@ -154,6 +155,9 @@
     <h2 id="ide">Investigating IDE and design-time builds inside Visual Studio</h2>
     <p>Use the <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank">Project System Tools</a> Visual Studio extension to record binary logs of IDE and design-time builds.</p> 
     <p>See more information about design-time builds here:<br/><a href="https://github.com/dotnet/project-system/blob/master/docs/design-time-builds.md">https://github.com/dotnet/project-system/blob/master/docs/design-time-builds.md</a></p>
+
+    <h2 id="security">Security concerns</h2>
+    <p>The binary log contains and exposes environment variables. Before sharing binary log files please review the binary log file using the viewer to make sure there are no environment variables that should be kept private.</p>
 
     <h2 id="api">Reading MSBuild .binlogs programmatically</h2>
     <p>Reference the <a href="https://www.nuget.org/packages/Microsoft.Build.Logging.StructuredLogger" target="_blank">Microsoft.Build.Logging.StructuredLogger</a> NuGet package and <a href="https://www.nuget.org/packages/Microsoft.Build.Framework/15.6.85" target="_blank">Microsoft.Build.Framework/15.6.85</a> and use this code to read the records from a .binlog:</p>
