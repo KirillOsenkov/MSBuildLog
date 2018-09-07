@@ -145,12 +145,12 @@
 
     <h2 id="olderVersions">Recording a binary log with older versions of MSBuild</h2>
     <p>The built-in <span class="inlineCode">/bl</span> switch was only introduced in MSBuild 15.3 (Visual Studio 2017 Update 3). However there is a way to record a binary log with previous versions of MSBuild as well. You can attach the logger to any MSBuild-based build using the logger library: <span class="inlineCode">StructuredLogger.dll</span>. It is available in a NuGet package:</p>
-    <a href="https://www.nuget.org/packages/Microsoft.Build.Logging.StructuredLogger" target="_blank">Microsoft.Build.Logging.StructuredLogger</a>
+    <a href="https://www.nuget.org/packages/MSBuild.StructuredLogger" target="_blank">MSBuild.StructuredLogger</a>
     <p>Alternatively, you can download <span class="inlineCode">StructuredLogger.dll</span> directly from the releases page at: <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/releases" target="_blank">https://github.com/KirillOsenkov/MSBuildStructuredLog/releases</a></p>
     <p>Use a command-line such as this to pass the <span class="inlineCode">BinaryLogger</span> to MSBuild:</p>
     <div class="code">msbuild solution.sln /t:Rebuild /v:diag /noconlog /logger:BinaryLogger,%localappdata%\MSBuildStructuredLogViewer\app-1.2.44\StructuredLogger.dll;1.binlog</div>
     <p>To use a portable version of the logger (e.g. with the dotnet msbuild command) you need a .NET Standard version of StructuredLogger.dll, not the .NET Framework (Desktop) version. Inside the NuGet package there is the lib\netstandard1.5\StructuredLogger.dll. Try passing that to dotnet build like this:</p>
-    <div class="code">dotnet msbuild Some.sln /v:diag /nologo /logger:BinaryLogger,"packages\Microsoft.Build.Logging.StructuredLogger.1.1.224\lib\netstandard1.5\StructuredLogger.dll";"C:\Users\SomeUser\Desktop\binarylog.binlog"</div>
+    <div class="code">dotnet msbuild Some.sln /v:diag /nologo /logger:BinaryLogger,"packages\MSBuild.StructuredLogger.1.2.48\lib\netstandard2.0\StructuredLogger.dll";"C:\Users\SomeUser\Desktop\binarylog.binlog"</div>
 
     <h2 id="ide">Investigating IDE and design-time builds inside Visual Studio</h2>
     <p>Use the <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank">Project System Tools</a> Visual Studio extension to record binary logs of IDE and design-time builds.</p> 
@@ -160,7 +160,7 @@
     <p>The binary log contains and exposes environment variables. Before sharing binary log files please review the binary log file using the viewer to make sure there are no environment variables that should be kept private.</p>
 
     <h2 id="api">Reading MSBuild .binlogs programmatically</h2>
-    <p>Reference the <a href="https://www.nuget.org/packages/Microsoft.Build.Logging.StructuredLogger" target="_blank">Microsoft.Build.Logging.StructuredLogger</a> NuGet package and <a href="https://www.nuget.org/packages/Microsoft.Build.Framework/15.6.85" target="_blank">Microsoft.Build.Framework/15.6.85</a> and use this code to read the records from a .binlog:</p>
+    <p>Reference the <a href="https://www.nuget.org/packages/MSBuild.StructuredLogger" target="_blank">MSBuild.StructuredLogger</a> NuGet package and <a href="https://www.nuget.org/packages/Microsoft.Build.Framework/15.8.166" target="_blank">Microsoft.Build.Framework/15.8.166</a> and use this code to read the records from a .binlog:</p>
     <div class="code">
 using System;
 using Microsoft.Build.Framework;
