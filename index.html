@@ -39,7 +39,7 @@
     </div>
 
     <div class="buttonHost">
-        <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/releases/download/v2.0.88/MSBuildStructuredLogSetup.exe" class="bigButton">Download&nbsp;MSBuild&nbsp;Structured&nbsp;Log&nbsp;Viewer</a>
+        <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/releases/download/v2.0.94/MSBuildStructuredLogSetup.exe" class="bigButton">Download&nbsp;MSBuild&nbsp;Structured&nbsp;Log&nbsp;Viewer</a>
     </div>
 
     <div>
@@ -50,7 +50,7 @@
     </div>
 
     <div>
-    <p>or, install the Visual Studio 2017 Extension to investigate builds inside Visual Studio:</p>
+    <p>or, install the Visual Studio Extension to investigate builds inside Visual Studio:</p>
     <div style="text-align:center">
     <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank"><img src="ProjectSystemTools.png" width="90px" height="90px"/><div>Project System Tools</div></a>
     </div>
@@ -148,9 +148,9 @@
     <a href="https://www.nuget.org/packages/MSBuild.StructuredLogger" target="_blank">MSBuild.StructuredLogger</a>
     <p>Alternatively, you can download <span class="inlineCode">StructuredLogger.dll</span> directly from the releases page at: <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/releases" target="_blank">https://github.com/KirillOsenkov/MSBuildStructuredLog/releases</a></p>
     <p>Use a command-line such as this to pass the <span class="inlineCode">BinaryLogger</span> to MSBuild:</p>
-    <div class="code">msbuild solution.sln /t:Rebuild /v:diag /noconlog /logger:BinaryLogger,%localappdata%\MSBuildStructuredLogViewer\app-2.0.88\StructuredLogger.dll;1.binlog</div>
+    <div class="code">msbuild solution.sln /t:Rebuild /v:diag /noconlog /logger:BinaryLogger,%localappdata%\MSBuildStructuredLogViewer\app-2.0.94\StructuredLogger.dll;1.binlog</div>
     <p>To use a portable version of the logger (e.g. with the dotnet msbuild command) you need a .NET Standard version of StructuredLogger.dll, not the .NET Framework (Desktop) version. Inside the NuGet package there is the lib\netstandard2.0\StructuredLogger.dll. Try passing that to dotnet build like this:</p>
-    <div class="code">dotnet msbuild Some.sln /v:diag /nologo /logger:BinaryLogger,"packages\MSBuild.StructuredLogger.2.0.88\lib\netstandard2.0\StructuredLogger.dll";"C:\Users\SomeUser\Desktop\binarylog.binlog"</div>
+    <div class="code">dotnet msbuild Some.sln /v:diag /nologo /logger:BinaryLogger,"packages\MSBuild.StructuredLogger.2.0.94\lib\netstandard2.0\StructuredLogger.dll";"C:\Users\SomeUser\Desktop\binarylog.binlog"</div>
 
     <h2 id="ide">Investigating IDE and design-time builds inside Visual Studio</h2>
     <p>Use the <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank">Project System Tools</a> Visual Studio extension to record binary logs of IDE and design-time builds.</p> 
