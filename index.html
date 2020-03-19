@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -160,7 +160,26 @@
     <p>The binary log contains and exposes environment variables. Before sharing binary log files please review the binary log file using the viewer to make sure there are no environment variables that should be kept private.</p>
 
     <h2 id="api">Reading MSBuild .binlogs programmatically</h2>
-    <p>Reference the <a href="https://www.nuget.org/packages/MSBuild.StructuredLogger" target="_blank">MSBuild.StructuredLogger</a> NuGet package and <a href="https://www.nuget.org/packages/Microsoft.Build.Framework/15.8.166" target="_blank">Microsoft.Build.Framework/15.8.166</a> and use this code to read the records from a .binlog:</p>
+
+    <p>Reference the <a href="https://www.nuget.org/packages/MSBuild.StructuredLogger" target="_blank">MSBuild.StructuredLogger</a> NuGet package.</p>
+    <p>You may also need to reference MSBuild <a href="https://www.nuget.org/packages/Microsoft.Build.Framework/15.8.166" target="_blank">Microsoft.Build.Framework/15.8.166</a>.</p>
+    <p>There are various APIs for various scenarios. A high-level API to read a .binlog file into a tree structure that you normally see in the viewer is:</p>
+    <div class="code">
+using System;
+using Microsoft.Build.Logging.StructuredLogger;
+
+class BinaryLogReadBuild
+{
+    static void Main(string[] args)
+    {
+        string binLogFilePath = @"C:\temp\test.binlog";
+
+        var buildRoot = BinaryLog.ReadBuild(binLogFilePath);
+        buildRoot.VisitAllChildren&lt;CscTask&gt;(c => Console.WriteLine(c.CommandLineArguments));
+    }
+}
+    </div>
+    <p>If you need a lower-level API to read the raw .binlog records yourself you can use <span class="inlineCode">BinLogReader.ReadRecords(string binLogFilePath)</span>:</p>
     <div class="code">
 using System;
 using Microsoft.Build.Framework;
