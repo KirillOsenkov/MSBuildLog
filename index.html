@@ -165,8 +165,8 @@
 
     <h2 id="api">Reading MSBuild .binlogs programmatically</h2>
 
-    <p>Reference the <a href="https://www.nuget.org/packages/MSBuild.StructuredLogger" target="_blank">MSBuild.StructuredLogger</a> NuGet package.</p>
-    <p>You may also need to reference MSBuild <a href="https://www.nuget.org/packages/Microsoft.Build.Framework/15.8.166" target="_blank">Microsoft.Build.Framework/15.8.166</a>.</p>
+    <p>Reference the <a href="https://www.nuget.org/packages/MSBuild.StructuredLogger" target="_blank">MSBuild.StructuredLogger</a> NuGet package. All you need is to reference StructuredLogger.dll from that package.</p>
+    <p>You may also need to reference MSBuild <a href="https://www.nuget.org/packages/Microsoft.Build.Framework" target="_blank">Microsoft.Build.Framework</a>.</p>
     <p>There are various APIs for various scenarios. A high-level API to read a .binlog file into a tree structure that you normally see in the viewer is:</p>
     <div class="code">
 using System;
@@ -183,6 +183,8 @@ class BinaryLogReadBuild
     }
 }
     </div>
+    <p>There is a more formal API to read the C# compiler invocations from a binlog, read more here:</p>
+    <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/wiki/Reading-Compiler-invocations" target="_blank">https://github.com/KirillOsenkov/MSBuildStructuredLog/wiki/Reading-Compiler-invocations</a>
     <p>If you need a lower-level API to read the raw .binlog records yourself you can use <span class="inlineCode">BinLogReader.ReadRecords(string binLogFilePath)</span>:</p>
     <div class="code">
 using System;
@@ -210,6 +212,8 @@ class BinLogReader
     }
 }
     </div>
+    <p>Another example of using the API is reading start/end times and durations of targets:</p>
+    <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/blob/4f3569ce7fb5592d78d162bd9f134d7f9ef4a650/src/Samples/TimesAndDurations/Program.cs#L23" target="_blank">https://github.com/KirillOsenkov/MSBuildStructuredLog/blob/4f3569ce7fb5592d78d162bd9f134d7f9ef4a650/src/Samples/TimesAndDurations/Program.cs#L23</a>
 
     <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog" target="_blank"><img style="position: absolute; top: 60px; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
 
