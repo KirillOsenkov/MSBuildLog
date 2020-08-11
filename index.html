@@ -44,19 +44,19 @@
     </div>
 
     <div>
-        <p>or, <a href="https://chocolatey.org/packages/msbuild-structured-log-viewer" target="_blank">install from Chocolatey</a>:</p>
-        <div class="nuget-badge">
-            <p><code><span>C:\&gt; </span>choco install msbuild-structured-log-viewer</code></p>
-        </div>
+    <p>or, <a href="https://chocolatey.org/packages/msbuild-structured-log-viewer" target="_blank">install from Chocolatey</a>:</p>
+    <div class="nuget-badge">
+        <p><code><span>C:\&gt; </span>choco install msbuild-structured-log-viewer</code></p>
+    </div>
     </div>
 
     <div>
-        <p>or, install the Visual Studio Extension to investigate builds inside Visual Studio:</p>
-        <div style="text-align:center">
+    <p>or, install the Visual Studio Extension to investigate builds inside Visual Studio:</p>
+    <div style="text-align:center">
             <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank"><img src="ProjectSystemTools.png" width="90px" height="90px" /><div>Project System Tools</div></a>
-        </div>
     </div>
-
+    </div>
+    
     <div>
         <p><a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/blob/master/README.md#running-the-avalonia-version-on-mac" target="_blank">Instructions for building and running on Mac</a></p>
     </div>
@@ -104,48 +104,48 @@
     <h2 id="commandline">Command-line help for the /bl switch</h2>
     <p>See MSBuild command-line help <span class="inlineCode">msbuild /?</span> for more information on the <span class="inlineCode">/bl</span> switch. The switch is available starting with MSBuild 15.3 (Visual Studio 2017 Update 3 or newer).</p>
     <div class="code">
-        /binaryLogger[:[LogFile=]output.binlog[;ProjectImports={None,Embed,ZipFile}]]
-        Serializes all build events to a compressed binary file.
-        By default the file is in the current directory and named
-        "msbuild.binlog". The binary log is a detailed description
-        of the build process that can later be used to reconstruct
-        text logs and used by other analysis tools. A binary log
-        is usually 10-20x smaller than the most detailed text
-        diagnostic-level log, but it contains more information.
-        (Short form: /bl)
+  /binaryLogger[:[LogFile=]output.binlog[;ProjectImports={None,Embed,ZipFile}]]
+                     Serializes all build events to a compressed binary file.
+                     By default the file is in the current directory and named
+                     "msbuild.binlog". The binary log is a detailed description
+                     of the build process that can later be used to reconstruct
+                     text logs and used by other analysis tools. A binary log
+                     is usually 10-20x smaller than the most detailed text
+                     diagnostic-level log, but it contains more information.
+                     (Short form: /bl)
 
-        The binary logger by default collects the source text of
-        project files, including all imported projects and target
-        files encountered during the build. The optional
-        ProjectImports switch controls this behavior:
+                     The binary logger by default collects the source text of
+                     project files, including all imported projects and target
+                     files encountered during the build. The optional 
+                     ProjectImports switch controls this behavior:
 
-        ProjectImports=None     - Don't collect the project
-        imports.
-        ProjectImports=Embed    - Embed project imports in the
-        log file.
-        ProjectImports=ZipFile  - Save project files to
-        output.projectimports.zip
-        where output is the same name
-        as the binary log file name.
+                      ProjectImports=None     - Don't collect the project
+                                                imports.
+                      ProjectImports=Embed    - Embed project imports in the
+                                                log file.
+                      ProjectImports=ZipFile  - Save project files to 
+                                                output.projectimports.zip
+                                                where output is the same name
+                                                as the binary log file name.
 
-        The default setting for ProjectImports is Embed.
-        Note: the logger does not collect non-MSBuild source files
-        such as .cs, .cpp etc.
+                     The default setting for ProjectImports is Embed.
+                     Note: the logger does not collect non-MSBuild source files
+                     such as .cs, .cpp etc.
 
-        A .binlog file can be "played back" by passing it to
-        msbuild.exe as an argument instead of a project/solution.
-        Other loggers will receive the information contained
-        in the log file as if the original build was happening.
-        You can read more about the binary log and its usages at:
-        https://github.com/Microsoft/msbuild/wiki/Binary-Log
+                     A .binlog file can be "played back" by passing it to
+                     msbuild.exe as an argument instead of a project/solution.
+                     Other loggers will receive the information contained
+                     in the log file as if the original build was happening.
+                     You can read more about the binary log and its usages at:
+                     https://github.com/Microsoft/msbuild/wiki/Binary-Log
 
-        Examples:
-        /bl
-        /bl:output.binlog
-        /bl:output.binlog;ProjectImports=None
-        /bl:output.binlog;ProjectImports=ZipFile
-        /bl:..\..\custom.binlog
-        /binaryLogger
+                     Examples:
+                       /bl
+                       /bl:output.binlog
+                       /bl:output.binlog;ProjectImports=None
+                       /bl:output.binlog;ProjectImports=ZipFile
+                       /bl:..\..\custom.binlog
+                       /binaryLogger
     </div>
 
     <h2 id="olderVersions">Recording a binary log with older versions of MSBuild</h2>
@@ -158,7 +158,7 @@
     <div class="code">dotnet msbuild Some.sln /v:diag /nologo /logger:BinaryLogger,"packages\MSBuild.StructuredLogger.2.1.174\lib\netstandard2.0\StructuredLogger.dll";"C:\Users\SomeUser\Desktop\binarylog.binlog"</div>
 
     <h2 id="ide">Investigating IDE and design-time builds inside Visual Studio</h2>
-    <p>Use the <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank">Project System Tools</a> Visual Studio extension to record binary logs of IDE and design-time builds.</p>
+    <p>Use the <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank">Project System Tools</a> Visual Studio extension to record binary logs of IDE and design-time builds.</p> 
     <p>See more information about design-time builds here:<br /><a href="https://github.com/dotnet/project-system/blob/master/docs/design-time-builds.md">https://github.com/dotnet/project-system/blob/master/docs/design-time-builds.md</a></p>
 
     <h2 id="security">Security concerns</h2>
@@ -170,54 +170,54 @@
     <p>You may also need to reference MSBuild <a href="https://www.nuget.org/packages/Microsoft.Build.Framework" target="_blank">Microsoft.Build.Framework</a>.</p>
     <p>There are various APIs for various scenarios. A high-level API to read a .binlog file into a tree structure that you normally see in the viewer is:</p>
     <div class="code">
-        using System;
-        using Microsoft.Build.Logging.StructuredLogger;
+using System;
+using Microsoft.Build.Logging.StructuredLogger;
 
-        class BinaryLogReadBuild
-        {
-        static void Main(string[] args)
-        {
+class BinaryLogReadBuild
+{
+    static void Main(string[] args)
+    {
         string binLogFilePath = @"C:\temp\test.binlog";
 
         var buildRoot = BinaryLog.ReadBuild(binLogFilePath);
         buildRoot.VisitAllChildren&lt;CscTask&gt;(c => Console.WriteLine(c.CommandLineArguments));
-        }
-        }
+    }
+}
     </div>
     <p>There is a more formal API to read the C# compiler invocations from a binlog, read more here:</p>
     <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/wiki/Reading-Compiler-invocations" target="_blank">https://github.com/KirillOsenkov/MSBuildStructuredLog/wiki/Reading-Compiler-invocations</a>
     <p>If you need a lower-level API to read the raw .binlog records yourself you can use <span class="inlineCode">BinLogReader.ReadRecords(string binLogFilePath)</span>:</p>
     <div class="code">
-        using System;
-        using Microsoft.Build.Framework;
-        using Microsoft.Build.Logging;
-        using Microsoft.Build.Logging.StructuredLogger;
+using System;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Logging;
+using Microsoft.Build.Logging.StructuredLogger;
 
-        class BinLogReader
-        {
-        static void Main(string[] args)
-        {
+class BinLogReader
+{
+    static void Main(string[] args)
+    {
         string binLogFilePath = @"C:\temp\test.binlog";
 
         var binLogReader = new BinLogReader();
         foreach (var record in binLogReader.ReadRecords(binLogFilePath))
         {
-        var buildEventArgs = record.Args;
+            var buildEventArgs = record.Args;
 
-        // print command lines of all tool tasks such as Csc
-        if (buildEventArgs is TaskCommandLineEventArgs taskCommandLine)
-        {
-        Console.WriteLine(taskCommandLine.CommandLine);
+            // print command lines of all tool tasks such as Csc
+            if (buildEventArgs is TaskCommandLineEventArgs taskCommandLine)
+            {
+                Console.WriteLine(taskCommandLine.CommandLine);
+            }
         }
-        }
-        }
-        }
+    }
+}
     </div>
     <p>Another example of using the API is reading start/end times and durations of targets:</p>
     <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/blob/4f3569ce7fb5592d78d162bd9f134d7f9ef4a650/src/Samples/TimesAndDurations/Program.cs#L23" target="_blank">https://github.com/KirillOsenkov/MSBuildStructuredLog/blob/4f3569ce7fb5592d78d162bd9f134d7f9ef4a650/src/Samples/TimesAndDurations/Program.cs#L23</a>
 
-    <a href="#sourcecode" target="_blank"><img style="position: absolute; top: 60px; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
-    
+    <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog" target="_blank"><img style="position: absolute; top: 60px; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+
     <h2 id="sourcecode">Source code on GitHub</h2>
     <p>The MSBuild Structured Log Viewer project is open-source on GitHub at:<br /><a href="https://github.com/KirillOsenkov/MSBuildStructuredLog" target="_blank">https://github.com/KirillOsenkov/MSBuildStructuredLog</a></p>
     <p>The Online Structured Log Viewer is open-source on GitHub at:<br /><a href="https://github.com/laurenprinn/MSBuildStructuredLog" target="_blank">https://github.com/laurenprinn/MSBuildStructuredLog</a></p>
