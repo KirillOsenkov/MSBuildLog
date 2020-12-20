@@ -161,7 +161,7 @@
     <p>Use the <a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank">Project System Tools</a> Visual Studio extension to record binary logs of IDE and design-time builds.</p> 
     <p>See more information about design-time builds here:<br /><a href="https://github.com/dotnet/project-system/blob/master/docs/design-time-builds.md">https://github.com/dotnet/project-system/blob/master/docs/design-time-builds.md</a></p>
 
-    <h2 id="security">Security concerns</h2>
+    <h2 id="security">Security Warning</h2>
     <p>The binary log contains and exposes all environment variables from the machine that the build ran on. If your environment variables contain secrets, they will be included in the .binlog file in plaintext.</p>
     <p>Additionally, the source code of all project (.csproj) and targets files (.props, .targets, etc) is embedded in the .binlog file as well.</p>
     <p>Some details from the file system (such as the name of the users folder) are visible as well.</p>
