@@ -162,7 +162,12 @@
     <p>See more information about design-time builds here:<br /><a href="https://github.com/dotnet/project-system/blob/master/docs/design-time-builds.md">https://github.com/dotnet/project-system/blob/master/docs/design-time-builds.md</a></p>
 
     <h2 id="security">Security concerns</h2>
-    <p>The binary log contains and exposes environment variables. Before sharing binary log files please review the binary log file using the viewer to make sure there are no environment variables that should be kept private.</p>
+    <p>The binary log contains and exposes all environment variables from the machine that the build ran on. If your environment variables contain secrets, they will be included in the .binlog file in plaintext.</p>
+    <p>Additionally, the source code of all project (.csproj) and targets files (.props, .targets, etc) is embedded in the .binlog file as well.</p>
+    <p>Some details from the file system (such as the name of the users folder) are visible as well.</p>
+    <p>However other source code (such as C# files) and files not related to the build are not included.</p>
+    <p>Before sharing binary log files please review the binary log file using the viewer to make sure there are no environment variables that should be kept private. Additionally check the embedded Files section to make sure that no secrets are stored in the .csproj files.</p>
+    <p>It is extremely important to be aware of these risks and it is recommended to treat the .binlog files like you treat your source code.</p>
 
     <h2 id="api">Reading MSBuild .binlogs programmatically</h2>
 
