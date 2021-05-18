@@ -68,7 +68,7 @@
     <img src="Screenshot1.png" width="100%" />
 
     <h2 id="replay">Replaying a .binlog to reconstruct text logs</h2>
-    <p>You can pass a <span class="inlineCode">.binlog</span> file to MSBuild instead of a project/solution to replay it to other loggers, as if a real build was happening. This allows you to reconstruct a text log of any verbosity given the <span class="inlineCode">.binlog</span> file. Read more at: <a href="https://github.com/Microsoft/msbuild/wiki/Binary-Log#replaying-a-binary-log">https://github.com/Microsoft/msbuild/wiki/Binary-Log#replaying-a-binary-log</a></p>
+    <p>You can pass a <span class="inlineCode">.binlog</span> file to MSBuild instead of a project/solution to replay it to other loggers, as if a real build was happening. This allows you to reconstruct a text log of any verbosity given the <span class="inlineCode">.binlog</span> file. Read more at: <a href="https://github.com/dotnet/msbuild/blob/main/documentation/wiki/Binary-Log.md#replaying-a-binary-log">https://github.com/Microsoft/msbuild/wiki/Binary-Log#replaying-a-binary-log</a></p>
 
     <h2 id="advantages">Binary log advantages</h2>
     <p>
@@ -82,7 +82,7 @@
             <li><span class="accent">Embedded source files</span> - optionally embed the source text of all project files and imported targets files used during the build, so it is possible to correlate log events with the source code. Preprocessed view (with all imports inlined) is available for each file (like <span class="inlineCode">/pp</span>).</li>
         </ul>
     </p>
-    <a href="https://github.com/Microsoft/msbuild/wiki/Binary-Log" target="_blank">Read more about the new MSBuild binary log format (*.binlog)</a>
+    <a href="https://github.com/dotnet/msbuild/blob/main/documentation/wiki/Binary-Log.md" target="_blank">Read more about the new MSBuild binary log format (*.binlog)</a>
 
     <h2 id="features">Viewer Features</h2>
     <p>The MSBuild Structured Log Viewer can build projects and solutions or open existing log files:</p>
