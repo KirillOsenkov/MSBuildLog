@@ -58,14 +58,6 @@
     </div>
 
     <div>
-    <p>or, install the Visual Studio Extension to investigate builds inside Visual Studio:</p>
-    <div style="text-align:center">
-        <a style="display: inline-block" href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank"><img src="ProjectSystemTools.png" width="90px" height="90px" /><div>Project System Tools (2019 and below)</div></a>
-        <a style="display: inline-block" href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools2022" target="_blank"><img src="ProjectSystemTools.png" width="90px" height="90px" /><div>Project System Tools 2022</div></a>
-    </div>
-    </div>
-    
-    <div>
         <p><a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/blob/main/README.md#building--running-the-avalonia-version-on-mac" target="_blank">Instructions for building and running on Mac</a></p>
     </div>
 
@@ -78,6 +70,16 @@
     <h2 id="usingdotnet">Using dotnet build -bl to record a binary log</h2>
     <p>You can also produce binary logs from the <span class="inlineCode">dotnet build</span> command by passing the <span class="inlineCode">-bl</span> argument:</p>
     <div class="code">dotnet build -bl</div>
+
+    <h2 id="MSBUILDDEBUGENGINE">Using MSBUILDDEBUGENGINE=1 to get full binlogs from Visual Studio</h2>
+    <p>There are known limitations in binlogs obtained via the Project System Tools. Instead, try setting the MSBUILDDEBUGENGINE=1 environment variable as described <a href="https://github.com/dotnet/msbuild/blob/e868d91a40fb59cd258844a8d31114c1c3fabf2a/documentation/wiki/Building-Testing-and-Debugging-on-Full-Framework-MSBuild.md#logs" target="_blank">here</a>.</p>
+
+    <h2 id="ProjectSystemTools"></h2>
+    <p>You can install the Visual Studio Project System Tools Extension (unsupported) to investigate builds inside Visual Studio:</p>
+    <div style="text-align:center">
+        <a style="display: inline-block" href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools" target="_blank"><img src="ProjectSystemTools.png" width="90px" height="90px" /><div>Project System Tools (2019 and below)</div></a>
+        <a style="display: inline-block" href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProjectSystemTools2022" target="_blank"><img src="ProjectSystemTools.png" width="90px" height="90px" /><div>Project System Tools 2022</div></a>
+    </div>
 
     <h2 id="replay">Replaying a .binlog to reconstruct text logs</h2>
     <p>You can pass a <span class="inlineCode">.binlog</span> file to MSBuild instead of a project/solution to replay it to other loggers, as if a real build was happening. This allows you to reconstruct a text log of any verbosity given the <span class="inlineCode">.binlog</span> file. Read more at: <a href="https://github.com/dotnet/msbuild/blob/main/documentation/wiki/Binary-Log.md#replaying-a-binary-log">https://github.com/Microsoft/msbuild/wiki/Binary-Log#replaying-a-binary-log</a></p>
