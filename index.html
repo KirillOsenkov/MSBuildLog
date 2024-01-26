@@ -31,6 +31,7 @@
             <li><a href="#MSBUILDDEBUGENGINE">Binlogs from Visual Studio</a></li>
             <li><a href="#advantages">Binary log advantages</a></li>
             <li><a href="#features">Viewer features</a></li>
+            <li><a href="#redaction">Sensitive data redaction</a></li>
             <li><a href="#commandline">Command-line help for /bl</a></li>
             <li><a href="#olderVersions">Recording a binary log with old MSBuild</a></li>
             <li><a href="#ide">Investigating design-time builds</a></li>
@@ -115,6 +116,17 @@
     <p>The viewer can read all formats and can save to <span class="inlineCode">*.xml</span>.</p>
 
     <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/blob/master/README.md#features" target="_blank">See here for the list of viewer features</a>
+
+
+    <h2 id="redaction">Sensitive data redaction</h2>
+    <p>
+        Binlog is containing rich troubleshooting information, which can as well include some of the data, that users might not want to share with others (environment variables, local paths, secrets passed to tasks etc.)
+        To allow sharing of such binlogs Viewer offers option to redact data from binlog under File -> Redact menu:
+    </p>
+    <img src="Screenshot-redact.png" width="100%" />
+    <p>
+        Note that the autodetection option is currently supporting only a very limited number of patterns (and even after future extensions it can only be considered best-efforts redaction - not an exhaustive one). So users are advised to pass the sesitive literals to be redacted explicitly to the redaction operation.
+    </p>
 
     <h2 id="commandline">Command-line help for the /bl switch</h2>
     <p>See MSBuild command-line help <span class="inlineCode">msbuild /?</span> for more information on the <span class="inlineCode">/bl</span> switch. The switch is available starting with MSBuild 15.3 (Visual Studio 2017 Update 3 or newer).</p>
