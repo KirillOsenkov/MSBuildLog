@@ -2,29 +2,37 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>MSBuildStructuredLog Download Stats (Light)</title>
+<title>MSBuildStructuredLog Download Stats</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <style>
 :root {
-  /* Light theme defaults */
   --bg: #f5f7fa;
   --panel: #ffffff;
   --accent: #0b70d1;
   --accent2: #d27f15;
   --accent3: #7b39ff;
+  --accent4: #128a63;
+  --accent5: #bc145c;
+  --accent6: #6f7e8f;
+  --accent7: #c44300;
+  --accent8: #1877c9;
   --grid: #e1e6ed;
   --text: #182028;
   --muted: #647586;
   --danger: #d91e42;
   --font-stack: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
 }
-
 [data-theme="dark"] {
   --bg: #0f1115;
   --panel: #1b1f27;
   --accent: #5fb3ff;
   --accent2: #f7a146;
   --accent3: #9d6bff;
+  --accent4: #26c197;
+  --accent5: #ff4f8b;
+  --accent6: #7e8b99;
+  --accent7: #ff7b2d;
+  --accent8: #3fa2ff;
   --grid: #2a313d;
   --text: #e6edf3;
   --muted: #9aa4af;
@@ -32,19 +40,16 @@
 }
 
 * { box-sizing: border-box; }
-
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-stack);
   line-height: 1.4;
-  padding: 1rem;
-  -webkit-font-smoothing: antialiased;
+  padding: 1rem 1rem 2.2rem;
 }
-
 h1 {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   margin: 0 0 .75rem;
   font-weight: 600;
   letter-spacing: .4px;
@@ -55,76 +60,55 @@ h1 {
   flex-wrap: wrap;
   gap: .75rem;
   align-items: flex-start;
-  margin-bottom: .75rem;
+  margin-bottom: .85rem;
 }
-
 fieldset {
   border: 1px solid var(--grid);
   padding: .6rem .75rem .75rem;
-  border-radius: .6rem;
-  min-width: 225px;
+  border-radius: .65rem;
   background: var(--panel);
   box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  min-width: 220px;
 }
-
 legend {
-  padding: 0 .4rem;
+  padding: 0 .45rem;
   font-weight: 600;
   color: var(--muted);
-  font-size: .75rem;
+  font-size: .74rem;
   letter-spacing: .5px;
 }
-
 label {
   display: flex;
   align-items: center;
   gap: .45rem;
-  font-size: .72rem;
+  font-size: .7rem;
   cursor: pointer;
   user-select: none;
+  line-height: 1.2;
 }
-
 input[type=checkbox], input[type=radio] {
   accent-color: var(--accent);
   cursor: pointer;
 }
-
-.range-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: .35rem;
-  font-size: .68rem;
-}
-
-.range-wrap input[type=range] {
-  width: 100%;
-}
-
-small {
-  color: var(--muted);
-  font-size: .65rem;
-}
-
 #status {
   font-size: .68rem;
   letter-spacing: .4px;
   color: var(--muted);
   display: flex;
-  gap: .75rem;
   flex-wrap: wrap;
-  align-items: center;
+  gap: .6rem;
+  max-width: 460px;
 }
 
 #chartWrap {
   position: relative;
   background: var(--panel);
   border: 1px solid var(--grid);
-  border-radius: .9rem;
-  padding: .6rem .75rem .85rem;
+  border-radius: .95rem;
+  padding: .6rem .75rem .9rem;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,.06);
 }
-
 canvas {
   width: 100%;
   height: 480px;
@@ -137,8 +121,8 @@ canvas {
   background: rgba(255,255,255,.92);
   border: 1px solid var(--grid);
   backdrop-filter: blur(4px);
-  border-radius: .45rem;
-  padding: .45rem .6rem;
+  border-radius: .5rem;
+  padding: .5rem .65rem;
   font-size: .65rem;
   white-space: nowrap;
   color: var(--text);
@@ -148,15 +132,18 @@ canvas {
   z-index: 10;
   box-shadow: 0 4px 10px -2px rgba(0,0,0,.12);
 }
+[data-theme="dark"] #tooltip {
+  background: rgba(24,30,40,.92);
+  color: var(--text);
+}
 
 #legend {
-  margin-top: .35rem;
+  margin-top: .4rem;
   display: flex;
   flex-wrap: wrap;
   gap: .55rem .95rem;
   font-size: .65rem;
 }
-
 .swatch {
   width: .9rem;
   height: .55rem;
@@ -168,43 +155,35 @@ canvas {
 
 button {
   background: var(--accent);
-  color: #ffffff;
+  color: #fff;
   font-weight: 600;
-  font-size: .7rem;
+  font-size: .71rem;
   border: none;
-  padding: .5rem .9rem;
-  border-radius: .55rem;
+  padding: .52rem .95rem;
+  border-radius: .6rem;
   cursor: pointer;
   letter-spacing: .5px;
   box-shadow: 0 2px 6px -2px rgba(0,0,0,.25), inset 0 0 0 1px rgba(0,0,0,.08);
   transition: background .15s;
 }
-
 button:hover { background: #0c5fb1; }
-
+button:active { transform: translateY(1px); }
 button.secondary {
   background: var(--panel);
   color: var(--muted);
   box-shadow: inset 0 0 0 1px var(--grid);
 }
+button.secondary:hover { background: #f0f3f7; }
+.theme-toggle { background: var(--accent3); }
+.theme-toggle:hover { background: #6129d4; }
 
-button.secondary:hover {
-  background: #f0f3f7;
+footer {
+  margin-top: 1.4rem;
+  font-size: .6rem;
+  color: var(--muted);
+  text-align: center;
+  opacity: .85;
 }
-
-.theme-toggle {
-  background: var(--accent3);
-}
-
-.theme-toggle:hover {
-  background: #6129d4;
-}
-
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-a:hover { text-decoration: underline; }
 
 @media (max-width: 680px) {
   canvas { height: 380px; }
@@ -215,37 +194,21 @@ a:hover { text-decoration: underline; }
 <h1>MSBuildStructuredLog Release Download Stats</h1>
 
 <div id="controls">
-  <fieldset>
+  <fieldset id="fileTypeFieldset">
     <legend>File Types</legend>
-    <label><input type="checkbox" id="chkReleases" checked> <span>RELEASES file</span></label>
-    <label><input type="checkbox" id="chkNupkg" checked> <span>.nupkg assets</span></label>
-    <label><input type="checkbox" id="chkCombined"> <span>Combined (merged)</span></label>
+    <div id="assetControls">
+      <!-- dynamically populated -->
+      <small style="display:block;margin-top:.4rem;color:var(--muted);">Select file types to visualize.</small>
+    </div>
   </fieldset>
 
   <fieldset>
     <legend>Chart Mode</legend>
     <label><input type="radio" name="mode" value="daily" checked> Daily (line)</label>
-    <label><input type="radio" name="mode" value="monthly"> Monthly (bar)</label>
+    <label><input type="radio" name="mode" value="monthly"> Monthly (stacked bars)</label>
   </fieldset>
 
-  <fieldset style="max-width:260px;">
-    <legend>Release Limit</legend>
-    <div class="range-wrap">
-      <label for="releaseLimit">
-        <strong>Include first N releases</strong>
-      </label>
-      <input type="range" id="releaseLimit" min="1" value="1" step="1">
-      <div style="display:flex;align-items:center;gap:.5rem;">
-        <input type="number" id="releaseLimitNumber" min="1" style="width:80px;padding:.25rem .35rem;font-size:.7rem;">
-        <small id="releaseLimitInfo">of ?</small>
-      </div>
-      <small>
-        The limit applies chronologically (earliest → latest). Adjust to focus on early adoption vs. life‑cycle.
-      </small>
-    </div>
-  </fieldset>
-
-  <div style="display:flex;flex-direction:column;gap:.45rem;">
+  <div style="display:flex;flex-direction:column;gap:.5rem;">
     <button id="btnRefresh" title="Refetch release data">Refresh</button>
     <button id="btnExport" class="secondary" title="Download CSV data">Export CSV</button>
     <button id="btnTheme" class="theme-toggle" title="Toggle Light/Dark">Toggle Theme</button>
@@ -260,189 +223,207 @@ a:hover { text-decoration: underline; }
   <div id="legend"></div>
 </div>
 
+<footer>
+  Daily average for an asset version = downloads / (days until next version of the same type). Monthly = sum of daily averages for days in that month. Data: GitHub Releases API.
+</footer>
+
 <script>
 (function(){
   const API_BASE = 'https://api.github.com/repos/KirillOsenkov/MSBuildStructuredLog/releases';
-  const PER_PAGE = 100; // GitHub max per_page
+  const PER_PAGE = 100;
+
   const chart = document.getElementById('chart');
   const ctx = chart.getContext('2d');
   const tooltip = document.getElementById('tooltip');
   const statusEl = document.getElementById('status');
   const legendEl = document.getElementById('legend');
-
-  const controls = {
-    releases: document.getElementById('chkReleases'),
-    nupkg: document.getElementById('chkNupkg'),
-    combined: document.getElementById('chkCombined'),
-    modeDaily: () => document.querySelector('input[name=mode][value=daily]').checked,
-    limitRange: document.getElementById('releaseLimit'),
-    limitNumber: document.getElementById('releaseLimitNumber'),
-    limitInfo: document.getElementById('releaseLimitInfo')
-  };
+  const assetControls = document.getElementById('assetControls');
 
   const btnRefresh = document.getElementById('btnRefresh');
   const btnExport = document.getElementById('btnExport');
   const btnTheme = document.getElementById('btnTheme');
 
-  const COLORS = {
-    releases: css('--accent'),
-    nupkg: css('--accent2'),
-    combined: css('--accent3')
-  };
-
   let allReleases = [];
-  let rawAssets = null;
-  let seriesDaily = {};
-  let seriesMonthly = {};
+  let datasetsDaily = {};   // key -> [{date,value,source}]
+  let datasetsMonthly = {}; // key -> monthly aggregated
+  let datasetOrder = [];    // deterministic order
   let drawnDataPoints = [];
-  let maxReleases = 0;
 
-  function css(varName){ return getComputedStyle(document.documentElement).getPropertyValue(varName).trim(); }
+  const COLOR_POOL = [
+    '--accent','--accent2','--accent3','--accent4','--accent5','--accent6','--accent7','--accent8'
+  ];
+  const TYPE_COLORS = {};
 
+  function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
   function fmtDate(d){ return d.toISOString().slice(0,10); }
-  function fmtMonth(d){ return d.getUTCFullYear() + '-' + String(d.getUTCMonth()+1).padStart(2,'0'); }
+  function fmtMonth(d){ return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0'); }
   function daysBetween(a,b){ return Math.max(1, Math.round((b - a) / 86400000)); }
   function setStatus(msg){ statusEl.textContent = msg; }
 
   async function fetchAllReleases(){
-    setStatus('Fetching paginated releases…');
-    let page = 1;
+    setStatus('Fetching releases…');
     const releases = [];
+    let page = 1;
     while(true){
-      const url = API_BASE + '?per_page=' + PER_PAGE + '&page=' + page;
+      const url = `${API_BASE}?per_page=${PER_PAGE}&page=${page}`;
       const res = await fetch(url, { headers: { 'Accept':'application/vnd.github+json' }});
-      if(!res.ok){
-        throw new Error('GitHub API error ' + res.status);
-      }
+      if(!res.ok) throw new Error('GitHub API error '+res.status);
       const batch = await res.json();
-      if(batch.length === 0) break;
+      if(batch.length===0) break;
       releases.push(...batch.filter(r=>r.published_at));
-      setStatus(`Fetched page ${page}, cumulative releases: ${releases.length}`);
-      if(batch.length < PER_PAGE) break; // Last page
+      setStatus(`Fetched page ${page}, total so far ${releases.length}`);
+      if(batch.length < PER_PAGE) break;
       page++;
-      // Safety: avoid huge loops
-      if(page > 50){
-        console.warn('Stopped after 50 pages for safety.');
-        break;
-      }
+      if(page>30){ console.warn('Safety stop after 30 pages'); break; }
     }
     return releases.sort((a,b)=> new Date(a.published_at) - new Date(b.published_at));
   }
 
-  function applyLimit(releases){
-    // Limit = earliest N releases (chronological subset)
-    const limit = Number(controls.limitNumber.value);
-    return releases.slice(0, limit);
+  function classifyAsset(asset){
+    if(asset.name === 'RELEASES') return 'RELEASES';
+    if(asset.name.endsWith('.nupkg')) return '.nupkg';
+    // Use extension if present, else full name
+    const idx = asset.name.lastIndexOf('.');
+    if(idx > 0) return asset.name.slice(idx); // extension including dot
+    return asset.name; // fall back
   }
 
-  function extractAssets(releases){
-    const byType = { releases: [], nupkg: [] };
+  function buildDatasets(releases){
+    // Collect assets by type
+    const assetsByType = {};
     for(const rel of releases){
       const published = new Date(rel.published_at);
-      for(const asset of (rel.assets || [])){
-        if(asset.name === 'RELEASES'){
-          byType.releases.push({ name: asset.name, published, downloads: asset.download_count, releaseTag: rel.tag_name });
-        } else if(asset.name.endsWith('.nupkg')){
-          byType.nupkg.push({ name: asset.name, published, downloads: asset.download_count, releaseTag: rel.tag_name });
-        }
-      }
-    }
-    return byType;
-  }
-
-  function buildDaily(byType){
-    const today = new Date();
-    const daily = {};
-
-    for(const key of Object.keys(byType)){
-      const arr = byType[key];
-      const points = [];
-      for(let i=0;i<arr.length;i++){
-        const cur = arr[i];
-        const next = arr[i+1] ? arr[i+1].published : today;
-        // Normalize to midnight UTC
-        const start = new Date(Date.UTC(cur.published.getUTCFullYear(), cur.published.getUTCMonth(), cur.published.getUTCDate()));
-        const end = new Date(Date.UTC(next.getUTCFullYear(), next.getUTCMonth(), next.getUTCDate()));
-        const days = daysBetween(start,end);
-        const avg = cur.downloads / days;
-        for(let d=0; d<days; d++){
-          const dayDate = new Date(start.getTime() + d*86400000);
-          points.push({ date: dayDate, value: avg, source: key });
-        }
-      }
-      daily[key] = points;
-    }
-    // Combined
-    const combinedMap = new Map();
-    for(const key of ['releases','nupkg']){
-      daily[key].forEach(pt=>{
-        const k = fmtDate(pt.date);
-        combinedMap.set(k, (combinedMap.get(k) || 0) + pt.value);
+      (rel.assets||[]).forEach(asset=>{
+        const type = classifyAsset(asset);
+        if(!assetsByType[type]) assetsByType[type] = [];
+        assetsByType[type].push({
+          published,
+          downloads: asset.download_count,
+          name: asset.name,
+          tag: rel.tag_name
+        });
       });
     }
-    daily.combined = Array.from(combinedMap.entries()).map(([d,v])=>({
-      date: new Date(d+'T00:00:00Z'), value: v, source: 'combined'
-    }));
-    return daily;
-  }
 
-  function buildMonthly(daily){
-    const monthly = {};
-    for(const key of Object.keys(daily)){
-      const map = new Map();
-      for(const pt of daily[key]){
-        const m = fmtMonth(pt.date);
-        map.set(m, (map.get(m) || 0) + pt.value);
+    // Sort assets in each type by publish date
+    for(const t of Object.keys(assetsByType)){
+      assetsByType[t].sort((a,b)=> a.published - b.published);
+    }
+
+    // Daily datasets: for each asset version, allocate average over its span until next same-type asset
+    const today = new Date();
+    const daily = {};
+    for(const type of Object.keys(assetsByType)){
+      const entries = assetsByType[type];
+      const points = [];
+      for(let i=0;i<entries.length;i++){
+        const cur = entries[i];
+        const next = entries[i+1] ? entries[i+1].published : today;
+        const start = new Date(Date.UTC(cur.published.getUTCFullYear(), cur.published.getUTCMonth(), cur.published.getUTCDate()));
+        const end = new Date(Date.UTC(next.getUTCFullYear(), next.getUTCMonth(), next.getUTCDate()));
+        const spanDays = daysBetween(start,end);
+        const avg = cur.downloads / spanDays;
+        for(let d=0; d<spanDays; d++){
+          points.push({ date: new Date(start.getTime() + d*86400000), value: avg, source: type });
+        }
       }
-      monthly[key] = Array.from(map.entries()).map(([m,v])=>{
+      daily[type] = points;
+    }
+
+    // Monthly aggregation
+    const monthly = {};
+    for(const type of Object.keys(daily)){
+      const map = new Map();
+      daily[type].forEach(pt=>{
+        const m = fmtMonth(pt.date);
+        map.set(m, (map.get(m)||0) + pt.value);
+      });
+      monthly[type] = Array.from(map.entries()).map(([m,v])=>{
         const [year, month] = m.split('-').map(Number);
-        return { date: new Date(Date.UTC(year, month-1, 1)), value: v, source: key, label: m };
+        return { date: new Date(Date.UTC(year,month-1,1)), value: v, source: type, label: m };
       }).sort((a,b)=> a.date - b.date);
     }
-    return monthly;
+
+    datasetsDaily = daily;
+    datasetsMonthly = monthly;
+
+    // Determine ordering: RELEASES, .nupkg first, then others alpha
+    const others = Object.keys(daily).filter(t=> t!=='RELEASES' && t!=='.nupkg').sort();
+    datasetOrder = ['RELEASES','.nupkg', ...others];
   }
 
-  function activeKeys(){
-    const keys = [];
-    if(controls.releases.checked) keys.push('releases');
-    if(controls.nupkg.checked) keys.push('nupkg');
-    if(controls.combined.checked) keys.push('combined');
-    return keys;
+  function initColors(){
+    datasetOrder.forEach((type,i)=>{
+      const varName = COLOR_POOL[i % COLOR_POOL.length];
+      TYPE_COLORS[type] = css(varName);
+    });
   }
 
-  function makeLegend(keys){
+  function renderAssetControls(){
+    assetControls.innerHTML = '';
+    datasetOrder.forEach((type, idx)=>{
+      const id = 'chk_' + type.replace(/[^a-zA-Z0-9]/g,'_');
+      const checked = (type === 'RELEASES' || type === '.nupkg');
+      const label = document.createElement('label');
+      label.innerHTML = `<input type="checkbox" id="${id}" data-type="${type}" ${checked?'checked':''}> <span>${type}</span>`;
+      assetControls.appendChild(label);
+    });
+    // Attach events
+    assetControls.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+      cb.addEventListener('change', draw);
+    });
+  }
+
+  function getActiveTypes(){
+    return datasetOrder.filter(type=>{
+      const id = 'chk_' + type.replace(/[^a-zA-Z0-9]/g,'_');
+      const el = document.getElementById(id);
+      return el && el.checked;
+    });
+  }
+
+  function buildLegend(active){
     legendEl.innerHTML = '';
-    if(keys.length === 0){
+    if(!active.length){
       legendEl.textContent = 'No datasets selected.';
       return;
     }
-    keys.forEach(k=>{
+    active.forEach(type=>{
       const div = document.createElement('div');
-      div.innerHTML = `<span class="swatch" style="background:${COLORS[k]}"></span>${k}`;
+      div.innerHTML = `<span class="swatch" style="background:${TYPE_COLORS[type]}"></span>${type}`;
       legendEl.appendChild(div);
     });
   }
 
   function getDisplaySeries(){
-    const keys = activeKeys();
-    makeLegend(keys);
-    return controls.modeDaily() ? keys.map(k=>seriesDaily[k]) : keys.map(k=>seriesMonthly[k]);
+    const active = getActiveTypes();
+    buildLegend(active);
+    const dailyMode = document.querySelector('input[name=mode][value=daily]').checked;
+    return dailyMode
+      ? active.map(t=>datasetsDaily[t])
+      : active.map(t=>datasetsMonthly[t]);
+  }
+
+  function formatNumber(n){
+    if(n >= 1_000_000) return (n/1_000_000).toFixed(1)+'M';
+    if(n >= 1_000) return (n/1_000).toFixed(1)+'K';
+    return n.toFixed(0);
   }
 
   function draw(){
     const w = chart.width = chart.clientWidth * window.devicePixelRatio;
     const h = chart.height = chart.clientHeight * window.devicePixelRatio;
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    ctx.clearRect(0,0,chart.clientWidth, chart.clientHeight);
-    ctx.font = '11px ' + css('--font-stack');
+    ctx.clearRect(0,0,chart.clientWidth,chart.clientHeight);
+    ctx.font = '11px '+css('--font-stack');
     ctx.lineWidth = 1;
 
-    const margin = { left: 60, right: 20, top: 24, bottom: 56 };
+    const margin = { left: 60, right: 20, top: 24, bottom: 60 };
     const innerW = chart.clientWidth - margin.left - margin.right;
     const innerH = chart.clientHeight - margin.top - margin.bottom;
 
     const seriesArr = getDisplaySeries();
-    if(seriesArr.every(arr=>!arr || arr.length===0)){
+    if(seriesArr.length === 0 || seriesArr.every(a=>!a || !a.length)){
       ctx.fillStyle = css('--muted');
       ctx.fillText('No data to display.', margin.left + 10, margin.top + 20);
       drawnDataPoints = [];
@@ -454,8 +435,8 @@ a:hover { text-decoration: underline; }
     const maxDate = Math.max(...allPts.map(p=>p.date.getTime()));
     const maxValue = Math.max(...allPts.map(p=>p.value));
 
-    const xScale = (t)=> margin.left + ((t - minDate) / (maxDate - minDate || 1)) * innerW;
-    const yScale = (v)=> margin.top + innerH - (v / (maxValue || 1)) * innerH;
+    const xScale = t => margin.left + ((t - minDate)/(maxDate - minDate || 1))*innerW;
+    const yScale = v => margin.top + innerH - (v/(maxValue||1))*innerH;
 
     // Grid
     ctx.strokeStyle = css('--grid');
@@ -464,7 +445,7 @@ a:hover { text-decoration: underline; }
     const gridLines = 6;
     for(let i=0;i<=gridLines;i++){
       const y = margin.top + (innerH/gridLines)*i;
-      ctx.moveTo(margin.left, y);
+      ctx.moveTo(margin.left,y);
       ctx.lineTo(chart.clientWidth - margin.right, y);
     }
     ctx.stroke();
@@ -480,79 +461,75 @@ a:hover { text-decoration: underline; }
     }
 
     // X labels
+    const dailyMode = document.querySelector('input[name=mode][value=daily]').checked;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    const mode = controls.modeDaily() ? 'daily' : 'monthly';
     let ticks = 8;
-    if(mode === 'monthly'){
-      ticks = Math.min(12, seriesArr[0]?.length || 12);
+    if(!dailyMode){
+      ticks = Math.min(12, seriesArr[0].length || 12);
     }
     for(let i=0;i<=ticks;i++){
-      const t = minDate + ((maxDate - minDate) / ticks) * i;
+      const t = minDate + ((maxDate - minDate)/ticks)*i;
       const xd = xScale(t);
-      ctx.fillStyle = css('--muted');
       const d = new Date(t);
-      const label = mode === 'daily'
-        ? d.toISOString().slice(0,10)
-        : fmtMonth(d);
+      const label = dailyMode ? d.toISOString().slice(0,10) : fmtMonth(d);
       ctx.save();
-      // Slight rotate for space (optional)
-      ctx.translate(xd, chart.clientHeight - margin.bottom + 26);
+      ctx.translate(xd, chart.clientHeight - margin.bottom + 28);
       ctx.rotate(-0.6);
-      ctx.fillText(label, 0, 0);
+      ctx.fillStyle = css('--muted');
+      ctx.fillText(label,0,0);
       ctx.restore();
     }
 
     drawnDataPoints = [];
-    if(mode === 'monthly'){
-      // Bars (stacked if multiple)
-      const keys = activeKeys();
-      const grouped = {};
-      keys.forEach(k=>{
-        seriesMonthly[k].forEach(pt=>{
-          const id = fmtMonth(pt.date);
-          if(!grouped[id]) grouped[id] = [];
-          grouped[id].push(pt);
+
+    if(!dailyMode){
+      // Stacked monthly bars
+      const active = getActiveTypes();
+      // Build month -> array of {value, source}
+      const monthMap = {};
+      active.forEach(type=>{
+        datasetsMonthly[type].forEach(pt=>{
+          const id = pt.label;
+          (monthMap[id] ||= []).push(pt);
         });
       });
-      const months = Object.keys(grouped).sort();
-      const barBand = innerW / months.length;
-      const barWidth = barBand * 0.6;
-
+      const months = Object.keys(monthMap).sort();
+      const band = innerW / months.length;
+      const barWidth = band * 0.6;
       months.forEach((m, mi)=>{
-        const pts = grouped[m];
-        const baseX = margin.left + barBand * mi + barBand/2;
-        let stackAccum = 0;
+        const pts = monthMap[m];
+        const cx = margin.left + band*mi + band/2;
+        let stack = 0;
         pts.forEach(p=>{
-          const height = (p.value / maxValue) * innerH;
-          const x = baseX - barWidth/2;
-            const y = yScale(stackAccum + p.value);
-          ctx.fillStyle = COLORS[p.source] + 'd9';
-          roundedRect(ctx, x, y, barWidth, height, 4);
+          const h = (p.value / maxValue) * innerH;
+          const x = cx - barWidth/2;
+          const y = yScale(stack + p.value);
+          ctx.fillStyle = TYPE_COLORS[p.source] + 'DD';
+          roundedRect(ctx,x,y,barWidth,h,4);
           ctx.fill();
-          drawnDataPoints.push({ x, y, w: barWidth, h: height, value: p.value, date: p.label, source: p.source });
-          stackAccum += p.value;
+          drawnDataPoints.push({ x,y,w:barWidth,h,value:p.value,date:p.label,source:p.source });
+          stack += p.value;
         });
       });
     } else {
-      // Lines
-      const keys = activeKeys();
-      keys.forEach(k=>{
-        const pts = seriesDaily[k];
-        if(!pts || pts.length===0) return;
+      // Lines per dataset
+      const active = getActiveTypes();
+      active.forEach(type=>{
+        const pts = datasetsDaily[type];
+        if(!pts.length) return;
         ctx.lineWidth = 2;
-        ctx.strokeStyle = COLORS[k];
+        ctx.strokeStyle = TYPE_COLORS[type];
         ctx.beginPath();
         pts.forEach((p,i)=>{
           const x = xScale(p.date.getTime());
           const y = yScale(p.value);
-          if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-          drawnDataPoints.push({ x, y, r: 4, value: p.value, date: fmtDate(p.date), source: k });
+            if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+          drawnDataPoints.push({ x,y,r:4,value:p.value,date:fmtDate(p.date),source:type });
         });
         ctx.stroke();
-
         if(pts.length <= 400){
-          ctx.fillStyle = COLORS[k];
+          ctx.fillStyle = TYPE_COLORS[type];
           pts.forEach(p=>{
             const x = xScale(p.date.getTime());
             const y = yScale(p.value);
@@ -574,14 +551,9 @@ a:hover { text-decoration: underline; }
     ctx.stroke();
 
     ctx.fillStyle = css('--muted');
-    ctx.font = '12px ' + css('--font-stack');
+    ctx.font = '12px '+css('--font-stack');
     ctx.textAlign = 'center';
-    ctx.fillText(
-      mode === 'daily'
-        ? 'Daily Average Downloads'
-        : 'Monthly Downloads (sum of daily averages in period)',
-      chart.clientWidth/2, 8
-    );
+    ctx.fillText(dailyMode ? 'Daily Average Downloads' : 'Monthly Downloads (sum of daily averages)', chart.clientWidth/2, 8);
   }
 
   function roundedRect(ctx,x,y,w,h,r){
@@ -598,134 +570,120 @@ a:hover { text-decoration: underline; }
     ctx.closePath();
   }
 
-  function formatNumber(n){
-    if(n >= 1_000_000) return (n/1_000_000).toFixed(1)+'M';
-    if(n >= 1_000) return (n/1_000).toFixed(1)+'K';
-    return n.toFixed(0);
-  }
-
   function rebuild(){
     if(!allReleases.length) return;
-    const limited = applyLimit(allReleases);
-    rawAssets = extractAssets(limited);
-    seriesDaily = buildDaily(rawAssets);
-    seriesMonthly = buildMonthly(seriesDaily);
-    setStatus(
-      `Total releases: ${maxReleases} | Showing: ${limited.length} | RELEASES assets: ${rawAssets.releases.length} | .nupkg assets: ${rawAssets.nupkg.length}`
-    );
+    buildDatasets(allReleases);
+    initColors();
+    renderAssetControls();
+    setStatus(`Total releases: ${allReleases.length} | File types: ${datasetOrder.length}`);
     draw();
   }
 
   async function init(force=false){
     try{
-      if(force || allReleases.length === 0){
-        setStatus('Loading releases…');
+      if(force || !allReleases.length){
         allReleases = await fetchAllReleases();
-        maxReleases = allReleases.length;
-        // Initialize limit controls
-        controls.limitRange.max = maxReleases;
-        controls.limitNumber.max = maxReleases;
-        controls.limitRange.value = maxReleases;
-        controls.limitNumber.value = maxReleases;
-        controls.limitInfo.textContent = `of ${maxReleases}`;
       }
       rebuild();
     }catch(err){
       console.error(err);
-      setStatus('Error: ' + err.message);
+      setStatus('Error: '+err.message);
     }
   }
 
   // Tooltip
   chart.addEventListener('mousemove', e=>{
     const rect = chart.getBoundingClientRect();
-    const x = (e.clientX - rect.left) * window.devicePixelRatio;
-    const y = (e.clientY - rect.top) * window.devicePixelRatio;
-    const mode = controls.modeDaily() ? 'daily' : 'monthly';
-    let hit = null;
+    const x = (e.clientX - rect.left)*window.devicePixelRatio;
+    const y = (e.clientY - rect.top)*window.devicePixelRatio;
+    const dailyMode = document.querySelector('input[name=mode][value=daily]').checked;
 
-    if(mode === 'monthly'){
+    let hit = null;
+    if(!dailyMode){
       for(const dp of drawnDataPoints){
-        if(x >= dp.x && x <= dp.x + dp.w && y >= dp.y && y <= dp.y + dp.h){
-          hit = dp; break;
-        }
+        if(x>=dp.x && x<=dp.x+dp.w && y>=dp.y && y<=dp.y+dp.h){ hit = dp; break; }
       }
     } else {
       let minDist = Infinity;
       for(const dp of drawnDataPoints){
-        const dx = x - dp.x;
-        const dy = y - dp.y;
+        const dx = x - dp.x, dy = y - dp.y;
         const dist = Math.sqrt(dx*dx + dy*dy);
         if(dist < 16 && dist < minDist){
-          hit = dp;
-          minDist = dist;
+          hit = dp; minDist = dist;
         }
       }
     }
-
     if(hit){
       tooltip.style.opacity = 1;
       tooltip.style.left = e.clientX + 'px';
       tooltip.style.top = (e.clientY - 10) + 'px';
-      tooltip.innerHTML =
-        `<strong>${hit.source}</strong><br>${hit.date}<br>${hit.value.toFixed(2)} downloads`;
+      tooltip.innerHTML = `<strong>${hit.source}</strong><br>${hit.date}<br>${hit.value.toFixed(2)} downloads`;
     } else {
       tooltip.style.opacity = 0;
     }
   });
-
   chart.addEventListener('mouseleave', ()=> tooltip.style.opacity = 0);
 
-  // Export CSV
+  // Export CSV (dynamic headers)
   btnExport.addEventListener('click', ()=>{
-    if(!seriesDaily.releases) return;
+    const active = datasetOrder; // export all types regardless of selection
+    if(!active.length) return;
+
+    // Prepare headers
+    const dailyHeaders = active.map(t=> `${t}_daily`);
+    const monthlyHeaders = active.map(t=> `${t}_month`);
+
     const rows = [];
-    rows.push(['date','releases_daily','nupkg_daily','combined_daily','month','releases_month','nupkg_month','combined_month']);
-    const dailyMap = new Map();
-    ['releases','nupkg','combined'].forEach(k=>{
-      seriesDaily[k].forEach(p=>{
+    rows.push(['date', ...dailyHeaders, 'month', ...monthlyHeaders]);
+
+    // Build maps
+    const dailyMap = new Map(); // date -> {type: value}
+    active.forEach(type=>{
+      (datasetsDaily[type]||[]).forEach(p=>{
         const key = fmtDate(p.date);
-        if(!dailyMap.has(key)) dailyMap.set(key, { date: key });
-        dailyMap.get(key)[k] = p.value;
+        if(!dailyMap.has(key)) dailyMap.set(key,{});
+        dailyMap.get(key)[type] = p.value;
       });
     });
+
     const monthMap = new Map();
-    ['releases','nupkg','combined'].forEach(k=>{
-      seriesMonthly[k].forEach(p=>{
-        const key = fmtMonth(p.date);
-        if(!monthMap.has(key)) monthMap.set(key, { month: key });
-        monthMap.get(key)[k] = p.value;
+    active.forEach(type=>{
+      (datasetsMonthly[type]||[]).forEach(p=>{
+        const key = p.label;
+        if(!monthMap.has(key)) monthMap.set(key,{});
+        monthMap.get(key)[type] = p.value;
       });
     });
 
     const allDates = Array.from(dailyMap.keys()).sort();
     allDates.forEach(d=>{
-      const dailyRow = dailyMap.get(d);
+      const dailyObj = dailyMap.get(d);
       const m = d.slice(0,7);
-      const monthRow = monthMap.get(m) || {};
+      const monthObj = monthMap.get(m) || {};
       rows.push([
         d,
-        dailyRow.releases ?? '',
-        dailyRow.nupkg ?? '',
-        dailyRow.combined ?? '',
+        ...active.map(t=> dailyObj[t] ?? ''),
         m,
-        monthRow.releases ?? '',
-        monthRow.nupkg ?? '',
-        monthRow.combined ?? ''
+        ...active.map(t=> monthObj[t] ?? '')
       ]);
     });
 
-    // Any months without daily rows
+    // Add months missing any daily rows
     const months = Array.from(monthMap.keys()).sort();
     months.forEach(m=>{
-      if(!allDates.some(d=>d.startsWith(m))){
-        const mr = monthMap.get(m);
-        rows.push(['','','','', m, mr.releases ?? '', mr.nupkg ?? '', mr.combined ?? '']);
+      if(!allDates.some(d=> d.startsWith(m))){
+        const monthObj = monthMap.get(m);
+        rows.push([
+          '',
+          ...active.map(()=> ''),
+          m,
+          ...active.map(t=> monthObj[t] ?? '')
+        ]);
       }
     });
 
-    const csv = rows.map(r=>r.map(cell=>String(cell).replace(/"/g,'""')).map(c=> `"${c}"`).join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const csv = rows.map(r=> r.map(cell=> String(cell).replace(/"/g,'""')).map(c=> `"${c}"`).join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'download-stats.csv';
@@ -741,24 +699,7 @@ a:hover { text-decoration: underline; }
     draw();
   });
 
-  // Limit events
-  function syncLimitFromRange(){
-    controls.limitNumber.value = controls.limitRange.value;
-    rebuild();
-  }
-  function syncLimitFromNumber(){
-    let val = Number(controls.limitNumber.value);
-    if(val < 1) val = 1;
-    if(val > maxReleases) val = maxReleases;
-    controls.limitNumber.value = val;
-    controls.limitRange.value = val;
-    rebuild();
-  }
-  controls.limitRange.addEventListener('input', syncLimitFromRange);
-  controls.limitNumber.addEventListener('change', syncLimitFromNumber);
-
-  // Other control events
-  [controls.releases, controls.nupkg, controls.combined].forEach(el=> el.addEventListener('change', draw));
+  // Mode change
   document.querySelectorAll('input[name=mode]').forEach(r=> r.addEventListener('change', draw));
   btnRefresh.addEventListener('click', ()=> init(true));
   window.addEventListener('resize', ()=> draw(), { passive: true });
