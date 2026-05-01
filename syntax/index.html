@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>MSBuild Structured Log search syntax</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <style>
+        body {
+            max-width: 72em;
+            color: #384047;
+            background: #fbfcfd;
+        }
+
+        p {
+            text-align: left;
+        }
+
+        .pageIntro {
+            margin-top: 52px;
+            padding: 18px 22px;
+            background: #f4faf7;
+            border: 1px solid #d7eadf;
+            border-radius: 8px;
+        }
+
+        .quickNav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 18px 0 28px;
+        }
+
+        .quickNav a {
+            display: inline-block;
+            padding: 6px 10px;
+            border: 1px solid #dbe7df;
+            border-radius: 6px;
+            text-decoration: none;
+            background: #f8fff8;
+        }
+
+        .lookupGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+            margin: 18px 0;
+        }
+
+        .lookupCard {
+            background: white;
+            border: 1px solid #dde5ea;
+            border-radius: 8px;
+            padding: 14px 16px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .lookupCard h3 {
+            margin-top: 0;
+            color: #254b3b;
+        }
+
+        .example {
+            margin: 10px 0;
+            padding: 10px 12px;
+            background: #f5f7f9;
+            border: 1px solid #dce3e8;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: Consolas, Courier New, Courier, monospace;
+            font-size: 13px;
+            color: #17212b;
+            white-space: pre;
+        }
+
+        .syntaxTable {
+            margin: 16px 0 24px;
+            background: white;
+            border: 1px solid #dde5ea;
+        }
+
+        .syntaxTable th {
+            text-align: left;
+            padding: 8px;
+            background: #eef6f1;
+            color: #243b31;
+            border-bottom: 1px solid #d4e2d9;
+        }
+
+        .syntaxTable td {
+            vertical-align: top;
+            border-bottom: 1px solid #edf1f4;
+        }
+
+        .syntaxTable tr:last-child td {
+            border-bottom: none;
+        }
+
+        .token {
+            font-family: Consolas, Courier New, Courier, monospace;
+            font-size: 13px;
+            color: #000;
+            background: #f0f0f0;
+            padding: 1px 4px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+
+        .hint {
+            color: #65727d;
+            font-size: 14px;
+        }
+
+        .twoColumn {
+            columns: 2 280px;
+            column-gap: 32px;
+        }
+
+        .twoColumn li {
+            break-inside: avoid;
+            margin-bottom: 6px;
+        }
+
+        .recipe {
+            margin: 18px 0;
+            padding: 14px 16px;
+            border-left: 4px solid #67a37f;
+            background: white;
+        }
+
+        .recipe h3 {
+            margin-top: 0;
+        }
+
+        .footerLinks {
+            margin-top: 36px;
+            padding-top: 18px;
+            border-top: 1px solid #cfd8df;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>MSBuild Structured Log search syntax</h1>
+    </div>
+
+    <div class="pageIntro">
+        <h1>Search syntax quick reference</h1>
+        <p>The same query syntax is used by Structured Log Viewer search and by BinlogMcp.</p>
+        <p>Queries are made from space-separated terms. Terms are combined with AND: every term must match unless you use a scoped expression such as <span class="inlineCode">under(...)</span> or <span class="inlineCode">not(...)</span>.</p>
+    </div>
+
+    <div class="quickNav">
+        <a href="#basics">Basics</a>
+        <a href="#kinds">Node kinds</a>
+        <a href="#fields">Field filters</a>
+        <a href="#scope">Scope</a>
+        <a href="#time">Time</a>
+        <a href="#indexes">Special indexes</a>
+        <a href="#recipes">Recipes</a>
+        <a href="#pitfalls">Pitfalls</a>
+    </div>
+
+    <h2 id="basics">Basics</h2>
+    <div class="lookupGrid">
+        <div class="lookupCard">
+            <h3>Find text anywhere</h3>
+            <p>Unquoted words are case-insensitive substring matches.</p>
+            <div class="example">Copying file</div>
+            <p class="hint">Matches nodes containing both <span class="inlineCode">Copying</span> and <span class="inlineCode">file</span>.</p>
+        </div>
+        <div class="lookupCard">
+            <h3>Find an exact phrase</h3>
+            <p>Use quotes when the words must appear together.</p>
+            <div class="example">"Copying file"</div>
+            <p class="hint">Matches the literal phrase.</p>
+        </div>
+        <div class="lookupCard">
+            <h3>Match a whole single word</h3>
+            <p>Quotes around one word turn off substring matching.</p>
+            <div class="example">"Csc"</div>
+            <p class="hint">Matches <span class="inlineCode">Csc</span> exactly, not every longer string containing those letters.</p>
+        </div>
+    </div>
+
+    <h2 id="kinds">Node Kind Filters</h2>
+    <p>Start with a <span class="inlineCode">$kind</span> token when you already know what kind of thing you want. This keeps broad text searches from drowning you in messages.</p>
+    <table class="syntaxTable">
+        <thead>
+            <tr><th>Token</th><th>Use it for</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><span class="token">$project</span></td><td>Project execution nodes. The same project can appear multiple times for different target frameworks, target lists, or MSBuild task calls.</td></tr>
+            <tr><td><span class="token">$projectevaluation</span></td><td>Evaluation nodes. Use these to inspect evaluated properties, items, imports, and preprocessed XML.</td></tr>
+            <tr><td><span class="token">$target</span></td><td>MSBuild targets.</td></tr>
+            <tr><td><span class="token">$task</span></td><td>Task invocations. Combine with a task name, for example <span class="inlineCode">$task Csc</span>.</td></tr>
+            <tr><td><span class="token">$error</span>, <span class="token">$warning</span>, <span class="token">$message</span></td><td>Build diagnostics and log messages.</td></tr>
+            <tr><td><span class="token">$property</span>, <span class="token">$item</span>, <span class="token">$metadata</span></td><td>Name/value nodes from evaluation or execution.</td></tr>
+            <tr><td><span class="token">$additem</span>, <span class="token">$removeitem</span></td><td>Item mutations that happened while targets were executing.</td></tr>
+            <tr><td><span class="token">$import</span>, <span class="token">$noimport</span></td><td>Resolved imports and imports that were skipped or failed.</td></tr>
+            <tr><td><span class="token">$csc</span>, <span class="token">$rar</span></td><td>Shortcuts for <span class="inlineCode">$task Csc</span> and <span class="inlineCode">$task ResolveAssemblyReference</span>.</td></tr>
+        </tbody>
+    </table>
+
+    <h2 id="fields">Field Filters</h2>
+    <p>Field filters are most useful for properties, items, metadata, skipped targets, and project-reference graph height.</p>
+    <div class="lookupGrid">
+        <div class="lookupCard">
+            <h3>Property by name</h3>
+            <div class="example">$property name=Configuration</div>
+            <p class="hint">The name contains <span class="inlineCode">Configuration</span>.</p>
+        </div>
+        <div class="lookupCard">
+            <h3>Exact property name</h3>
+            <div class="example">$property name="Configuration"</div>
+            <p class="hint">The name equals <span class="inlineCode">Configuration</span>.</p>
+        </div>
+        <div class="lookupCard">
+            <h3>Name and value</h3>
+            <div class="example">$property name=TargetFramework value=net8.0</div>
+            <p class="hint">Both filters must match.</p>
+        </div>
+        <div class="lookupCard">
+            <h3>Skipped targets</h3>
+            <div class="example">$target skipped=true</div>
+            <p class="hint">Use <span class="inlineCode">skipped=false</span> to exclude skipped targets.</p>
+        </div>
+    </div>
+
+    <h2 id="scope">Hierarchical Scope</h2>
+    <p>Most build questions are about context. Scope tells search where a match must be found in the tree.</p>
+    <table class="syntaxTable">
+        <thead>
+            <tr><th>Form</th><th>Meaning</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><span class="token">under(QUERY)</span></td><td>Match only nodes whose ancestors include something matching <span class="inlineCode">QUERY</span>.</td><td><span class="inlineCode">$csc under($project Core)</span></td></tr>
+            <tr><td><span class="token">notunder(QUERY)</span></td><td>Exclude nodes under a matching ancestor.</td><td><span class="inlineCode">$warning notunder($task Csc)</span></td></tr>
+            <tr><td><span class="token">project(QUERY)</span></td><td>Like <span class="inlineCode">under()</span>, but only checks the nearest parent project.</td><td><span class="inlineCode">$error project(MyApp)</span></td></tr>
+            <tr><td><span class="token">not(QUERY)</span></td><td>Exclude nodes that themselves match the nested query.</td><td><span class="inlineCode">$task not(Csc)</span></td></tr>
+        </tbody>
+    </table>
+    <p class="hint">Nested expressions are allowed. The parser is whitespace tolerant, so <span class="inlineCode">under ($project Foo)</span> and <span class="inlineCode">under($project Foo)</span> both work.</p>
+
+    <h2 id="time">Time Filters And Sorts</h2>
+    <p>There are two separate ideas: filter by a start/end timestamp, or annotate and sort by time.</p>
+    <div class="lookupGrid">
+        <div class="lookupCard">
+            <h3>Find slow tasks</h3>
+            <div class="example">$task $time</div>
+            <p class="hint">Adds duration and sorts slowest first. <span class="inlineCode">$duration</span> is an alias.</p>
+        </div>
+        <div class="lookupCard">
+            <h3>Find slow targets in one project</h3>
+            <div class="example">$target $time project(MyApp.csproj)</div>
+            <p class="hint">Good first move for performance investigations.</p>
+        </div>
+        <div class="lookupCard">
+            <h3>Sort projects by start time</h3>
+            <div class="example">$project $start</div>
+            <p class="hint">Use <span class="inlineCode">$end</span> for end time.</p>
+        </div>
+        <div class="lookupCard">
+            <h3>Filter by timestamp</h3>
+            <div class="example">$target start&gt;"2026-04-30 14:30:00"</div>
+            <p class="hint">Timestamps must be quoted and parseable by .NET.</p>
+        </div>
+    </div>
+
+    <h2 id="indexes">Special Indexes</h2>
+    <p>These searches use analysis indexes built from the binlog instead of only scanning visible tree text.</p>
+    <table class="syntaxTable">
+        <thead>
+            <tr><th>Index</th><th>Best for</th><th>Examples</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="token">$copy</span></td>
+                <td>Why a file was copied, where it came from, or which target/task copied it.</td>
+                <td><span class="inlineCode">$copy Foo.dll</span><br /><span class="inlineCode">$copy C:\full\path\Foo.dll</span></td>
+            </tr>
+            <tr>
+                <td><span class="token">$nuget</span></td>
+                <td>Package dependency chains from embedded <span class="inlineCode">project.assets.json</span> files.</td>
+                <td><span class="inlineCode">$nuget project(MyApp.csproj)</span><br /><span class="inlineCode">$nuget Newtonsoft.Json 13.0.3</span></td>
+            </tr>
+            <tr>
+                <td><span class="token">$projectreference</span></td>
+                <td>Project-to-project dependency graph. Scoped to one project, it is bidirectional.</td>
+                <td><span class="inlineCode">$projectreference project(App.csproj)</span><br /><span class="inlineCode">$project height=max</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="recipes">Investigation Recipes</h2>
+    <div class="recipe">
+        <h3>Cold start on an unfamiliar binlog</h3>
+        <ol>
+            <li>Check whether the build succeeded and note the MSBuild version.</li>
+            <li>Search for <span class="inlineCode">$error</span> and <span class="inlineCode">$warning</span>.</li>
+            <li>If it failed, open the error and look at its project, target, and task context in the tree.</li>
+            <li>If it is slow, search for <span class="inlineCode">$task $time</span> and <span class="inlineCode">$target $time</span>.</li>
+        </ol>
+    </div>
+
+    <div class="recipe">
+        <h3>Find which .NET SDK built it</h3>
+        <div class="example">Sdk.props</div>
+        <p>The SDK version is usually in the embedded path, such as <span class="inlineCode">C:\Program Files\dotnet\sdk\10.0.202\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.props</span>. Different SDK versions explain many build differences before anything else does.</p>
+    </div>
+
+    <div class="recipe">
+        <h3>Explain why a file was copied</h3>
+        <div class="example">$copy Foo.dll</div>
+        <p>Pick the full source or destination path from the result, then search again with that full path. The expanded tree usually shows whether the file came from RAR, copy-local, NuGet content, project references, publish, or an explicit item with copy metadata.</p>
+    </div>
+
+    <div class="recipe">
+        <h3>Find where a property got its final value</h3>
+        <ol>
+            <li>Find the project evaluation: <span class="inlineCode">$projectevaluation MyApp</span>.</li>
+            <li>Search properties and items in that evaluation for <span class="inlineCode">$property name=MyProperty</span>.</li>
+            <li>If import order matters, inspect the preprocessed XML for that evaluation.</li>
+        </ol>
+        <p class="hint">If you need the full lifetime of every assignment, rebuild with <span class="inlineCode">MSBUILDLOGPROPERTYTRACKING=15</span>.</p>
+    </div>
+
+    <div class="recipe">
+        <h3>Explain why a target did or did not run</h3>
+        <p>First search for the target in the project:</p>
+        <div class="example">$target CoreCompile project(MyApp.csproj)</div>
+        <p>If it ran or skipped, inspect its node and messages. If it is absent, inspect the preprocessed XML and imports to see whether the target was actually in scope.</p>
+    </div>
+
+    <div class="recipe">
+        <h3>Debug incremental build work</h3>
+        <p>Capture a clean build and then an immediate no-change rebuild. The second binlog is the interesting one.</p>
+        <div class="example">"Building target" "completely"</div>
+        <p>MSBuild logs this when a target's up-to-date check failed. Cross-check with <span class="inlineCode">$task $time</span> to focus on work that actually costs time.</p>
+    </div>
+
+    <h2 id="pitfalls">Pitfalls</h2>
+    <ul class="twoColumn">
+        <li><strong>Projects repeat.</strong> Multi-targeting and MSBuild task fan-out can create many project execution nodes for the same file.</li>
+        <li><strong>Evaluation is not execution.</strong> ProjectEvaluation nodes show evaluated properties and items. Target execution logs later mutations separately.</li>
+        <li><strong>Embedded source is a snapshot.</strong> It reflects what the binlog captured, not what is currently on disk.</li>
+    </ul>
+
+    <h2>Related Documentation</h2>
+    <p>The compact source material for this page lives here:</p>
+    <ul>
+        <li><a href="../binlogmcp/LlmGuide.md">BinlogMcp guide for LLMs</a></li>
+        <li><a href="../binlogmcp/SearchSyntax.md">MSBuild Structured Log search syntax</a></li>
+        <li><a href="../binlogmcp/">BinlogMcp documentation index</a></li>
+    </ul>
+
+    <div class="footerLinks">
+        <p><a href="../">Back to MSBuild Structured Log Viewer</a></p>
+    </div>
+</body>
+</html>

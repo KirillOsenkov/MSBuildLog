@@ -7,6 +7,7 @@ BinlogMcp exposes MSBuild .binlog search, navigation, source-file, project graph
 Primary docs:
 - https://msbuildlog.com/
 - https://msbuildlog.com/binlogmcp/
+- https://msbuildlog.com/syntax/
 - https://msbuildlog.com/binlogmcp/LlmGuide.md
 - https://msbuildlog.com/binlogmcp/SearchSyntax.md
 
