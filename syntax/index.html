@@ -25,22 +25,6 @@
             border-radius: 8px;
         }
 
-        .quickNav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 18px 0 28px;
-        }
-
-        .quickNav a {
-            display: inline-block;
-            padding: 6px 10px;
-            border: 1px solid #dbe7df;
-            border-radius: 6px;
-            text-decoration: none;
-            background: #f8fff8;
-        }
-
         .lookupGrid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -180,15 +164,18 @@
         <p>Queries are made from space-separated terms. Terms are combined with AND: every term must match unless you use a scoped expression such as <span class="inlineCode">under(...)</span> or <span class="inlineCode">not(...)</span>.</p>
     </div>
 
-    <div class="quickNav">
-        <a href="#basics">Basics</a>
-        <a href="#kinds">Node kinds</a>
-        <a href="#fields">Field filters</a>
-        <a href="#scope">Scope</a>
-        <a href="#time">Time</a>
-        <a href="#indexes">Special indexes</a>
-        <a href="#recipes">Recipes</a>
-        <a href="#pitfalls">Pitfalls</a>
+    <div id="toc" class="tocRoot">
+        <h3>Contents:</h3>
+        <ul>
+            <li><a href="#basics">Basics</a></li>
+            <li><a href="#kinds">Node kinds</a></li>
+            <li><a href="#fields">Field filters</a></li>
+            <li><a href="#scope">Scope</a></li>
+            <li><a href="#time">Time</a></li>
+            <li><a href="#indexes">Special indexes</a></li>
+            <li><a href="#recipes">Recipes</a></li>
+            <li><a href="#pitfalls">Pitfalls</a></li>
+        </ul>
     </div>
 
     <h2 id="basics">Basics</h2>
