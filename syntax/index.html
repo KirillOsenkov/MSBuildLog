@@ -112,6 +112,35 @@
             font-size: 14px;
         }
 
+        .imageStrip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            gap: 14px;
+            margin: 16px 0 24px;
+        }
+
+        figure {
+            margin: 0;
+            padding: 12px;
+            background: white;
+            border: 1px solid #dde5ea;
+            border-radius: 8px;
+        }
+
+        figure img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        figcaption {
+            margin-top: 8px;
+            color: #65727d;
+            font-size: 13px;
+            text-align: center;
+        }
+
         .twoColumn {
             columns: 2 280px;
             column-gap: 32px;
@@ -242,6 +271,7 @@
         </tbody>
     </table>
     <p class="hint">Nested expressions are allowed. The parser is whitespace tolerant, so <span class="inlineCode">under ($project Foo)</span> and <span class="inlineCode">under($project Foo)</span> both work.</p>
+    <p class="hint"><span class="inlineCode">project(A)</span> checks the nearest parent project. <span class="inlineCode">under($project A)</span> can also match work done by projects that A invoked through an MSBuild task. In the viewer, right-click a project, target, or task and choose <strong>Search in subtree</strong> to generate an <span class="inlineCode">under(...)</span> query for that exact subtree.</p>
 
     <h2 id="time">Time Filters And Sorts</h2>
     <p>There are two separate ideas: filter by a start/end timestamp, or annotate and sort by time.</p>
@@ -277,21 +307,49 @@
         <tbody>
             <tr>
                 <td><span class="token">$copy</span></td>
-                <td>Why a file was copied, where it came from, or which target/task copied it.</td>
-                <td><span class="inlineCode">$copy Foo.dll</span><br /><span class="inlineCode">$copy C:\full\path\Foo.dll</span></td>
+                <td>Why a file was copied, where it came from, or which target/task copied it. Directory searches are grouped into Incoming and Outgoing copies.</td>
+                <td><span class="inlineCode">$copy Foo.dll</span><br /><span class="inlineCode">$copy directory\path</span><br /><span class="inlineCode">$copy C:\full\path\Foo.dll</span></td>
             </tr>
             <tr>
                 <td><span class="token">$nuget</span></td>
-                <td>Package dependency chains from embedded <span class="inlineCode">project.assets.json</span> files.</td>
-                <td><span class="inlineCode">$nuget project(MyApp.csproj)</span><br /><span class="inlineCode">$nuget Newtonsoft.Json 13.0.3</span></td>
+                <td>Package dependency chains from embedded <span class="inlineCode">project.assets.json</span> files. Search by package name, version, dependency, or file from a package.</td>
+                <td><span class="inlineCode">$nuget project(MyApp.csproj)</span><br /><span class="inlineCode">$nuget project(MyApp.csproj) Package.Name</span><br /><span class="inlineCode">$nuget project(MyApp.csproj) File.dll</span><br /><span class="inlineCode">$nuget project(.csproj) 13.0.3</span></td>
             </tr>
             <tr>
                 <td><span class="token">$projectreference</span></td>
-                <td>Project-to-project dependency graph. Scoped to one project, it is bidirectional.</td>
+                <td>Project-to-project dependency graph. Scoped to one project, it is bidirectional. Use <span class="inlineCode">height=0</span>, <span class="inlineCode">height=1</span>, or <span class="inlineCode">height=max</span> to find projects by graph depth.</td>
                 <td><span class="inlineCode">$projectreference project(App.csproj)</span><br /><span class="inlineCode">$project height=max</span></td>
             </tr>
         </tbody>
     </table>
+
+    <h3>$copy examples</h3>
+    <p><span class="inlineCode">$copy filename</span> finds copy operations by file-name substring. <span class="inlineCode">$copy directory\path</span> shows files copied into and out of a directory. <span class="inlineCode">$copy full\file\path</span> focuses on one specific file. If the file came from a NuGet package, the result can show which package and dependency chain brought it in. If the copy came from a <span class="inlineCode">None</span> or <span class="inlineCode">Content</span> item with <span class="inlineCode">CopyToOutputDirectory</span>, that is shown too.</p>
+    <figure>
+        <img src="https://github.com/KirillOsenkov/MSBuildStructuredLog/assets/679326/6e2c3133-60bd-4c4a-aa69-03ebbf908642" alt="$copy search result showing why a file was copied" style="width: 481.5px;" />
+        <figcaption>$copy explains copy operations, including NuGet and CopyToOutputDirectory provenance.</figcaption>
+    </figure>
+
+    <h3>$nuget examples</h3>
+    <p>Use <span class="inlineCode">project(.)</span> or <span class="inlineCode">project(.csproj)</span> to search all projects, which is useful but can be slower on large logs. In the viewer, right-click a project and choose <strong>Search project.assets.json</strong> to inspect that project's NuGet dependencies.</p>
+    <div class="imageStrip">
+        <figure>
+            <img src="https://github.com/KirillOsenkov/MSBuildStructuredLog/assets/679326/a159c51d-a3bb-492f-95e0-49233da45297" alt="$nuget project query listing dependencies" style="width: 446.5px;" />
+            <figcaption><span class="inlineCode">$nuget project(MyProject.csproj)</span></figcaption>
+        </figure>
+        <figure>
+            <img src="https://github.com/KirillOsenkov/MSBuildStructuredLog/assets/679326/c6e57127-2148-47b1-9e18-16a3db76d49c" alt="$nuget package-name query showing dependency matches" style="width: 393.5px;" />
+            <figcaption><span class="inlineCode">$nuget project(MyProject.csproj) Package.Name</span></figcaption>
+        </figure>
+        <figure>
+            <img src="https://github.com/KirillOsenkov/MSBuildStructuredLog/assets/679326/9bd9eadf-c9c7-460a-8212-562d438bda7f" alt="$nuget file query showing the package a file came from" style="width: 447.5px;" />
+            <figcaption><span class="inlineCode">$nuget project(MyProject.csproj) File.dll</span></figcaption>
+        </figure>
+        <figure>
+            <img src="https://github.com/KirillOsenkov/MSBuildStructuredLog/assets/679326/8e0e0dcf-170e-47cd-a3ec-b8191c2c8bb3" alt="$nuget version query across projects" style="width: 406px;" />
+            <figcaption><span class="inlineCode">$nuget project(.csproj) 13.0.3</span></figcaption>
+        </figure>
+    </div>
 
     <h2 id="recipes">Investigation Recipes</h2>
     <div class="recipe">
