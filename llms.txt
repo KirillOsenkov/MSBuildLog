@@ -1,0 +1,15 @@
+# MSBuild Structured Log / BinlogMcp
+
+MSBuild Structured Log Viewer records, reads, searches, and analyzes MSBuild .binlog files.
+
+BinlogMcp exposes MSBuild .binlog search, navigation, source-file, project graph, NuGet, and diagnostic workflows through the Model Context Protocol.
+
+Primary docs:
+- https://msbuildlog.com/
+- https://msbuildlog.com/binlogmcp/
+- https://msbuildlog.com/binlogmcp/LlmGuide.md
+- https://msbuildlog.com/binlogmcp/SearchSyntax.md
+
+Source:
+- https://github.com/KirillOsenkov/MSBuildStructuredLog
+- https://github.com/KirillOsenkov/MSBuildStructuredLog/tree/main/src/BinlogMcp

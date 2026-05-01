@@ -37,6 +37,7 @@
             <li><a href="#ide">Investigating design-time builds</a></li>
             <li><a href="#security">Security concerns</a></li>
             <li><a href="#api">Reading MSBuild .binlogs programmatically</a></li>
+            <li><a href="#binlogmcp">Binlog MCP documentation for LLMs</a></li>
             <li><a href="#sourcecode">Source code on GitHub</a></li>
         </ul>
     </div>
@@ -241,6 +242,15 @@
     </div>
     <p>Another example of using the API is reading start/end times and durations of targets:</p>
     <a href="https://github.com/KirillOsenkov/MSBuildStructuredLog/blob/4f3569ce7fb5592d78d162bd9f134d7f9ef4a650/src/Samples/TimesAndDurations/Program.cs#L23" target="_blank">https://github.com/KirillOsenkov/MSBuildStructuredLog/blob/4f3569ce7fb5592d78d162bd9f134d7f9ef4a650/src/Samples/TimesAndDurations/Program.cs#L23</a>
+
+    <h2 id="binlogmcp">Binlog MCP documentation for LLMs</h2>
+    <p>BinlogMcp exposes MSBuild <span class="inlineCode">.binlog</span> search, navigation, source-file, project graph, NuGet, and diagnostic workflows through the Model Context Protocol.</p>
+    <p>The following documents are mirrored from the MSBuildStructuredLog source repository so crawlers, search engines, and LLM training pipelines can discover stable public copies:</p>
+    <ul>
+        <li><a href="binlogmcp/">BinlogMcp documentation index</a></li>
+        <li><a href="binlogmcp/LlmGuide.md">BinlogMcp guide for LLMs</a></li>
+        <li><a href="binlogmcp/SearchSyntax.md">MSBuild Structured Log search syntax</a></li>
+    </ul>
 
     <h2 id="sourcecode">Source code on GitHub</h2>
     <p>The MSBuild Structured Log Viewer project is open-source on GitHub at:<br /><a href="https://github.com/KirillOsenkov/MSBuildStructuredLog" target="_blank">https://github.com/KirillOsenkov/MSBuildStructuredLog</a></p>
