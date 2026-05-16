@@ -231,6 +231,16 @@ Sometimes the right answer is to ask the user for a rebuild with extra MSBuild i
 ### Find an MSBuild task call chain
 `MSBuild` task calls cross project boundaries. From a deep `Project` node, `get_ancestors` walks up through the `MSBuild` tasks back to the entry project. `notunder($task MSBuild)` is sometimes useful to filter out re-entrant noise.
 
+## Pair the binlog with the binaries on disk
+
+When the build's output `bin\` / publish directory is still available on the local machine (typical for local repros — CI artifacts may have been stripped), pair the binlog with the **MetadataTools** triad for ground-truth answers about the resulting assemblies:
+
+- **`lbi <dir-or-file>`** — assembly version, target framework, MVID, public key, strong-name signing.
+- **`refdump <dir>\*.dll [-a:Name [-t [-m]]]`** — assembly reference graph, optionally narrowed to consumers of one assembly (workhorse for "who's using `Newtonsoft.Json`?").
+- **`checkbinarycompat <dir>`** — missing assemblies, version mismatches, missing/changed members across an output directory.
+
+The binlog explains *why* `Foo.dll` landed in the output and *from which NuGet package*; the triad tells you *what version actually shipped on disk* and *who references it now*. Especially useful follow-ups to the `$copy` and `$nuget` recipes above. Full docs and decision tree: <https://github.com/KirillOsenkov/MetadataTools/blob/main/llms.txt>
+
 ## Pitfalls
 
 - **`matched=N+`** means the cap was hit — use `count` if you need the truth.

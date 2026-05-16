@@ -14,3 +14,7 @@ Primary docs:
 Source:
 - https://github.com/KirillOsenkov/MSBuildStructuredLog
 - https://github.com/KirillOsenkov/MSBuildStructuredLog/tree/main/src/BinlogMcp
+
+Companion tools for assembly investigations (versions, references, binary compatibility on disk — often paired with binlog work):
+- MetadataTools (lbi, refdump, checkbinarycompat): https://github.com/KirillOsenkov/MetadataTools
+- LLM docs: https://github.com/KirillOsenkov/MetadataTools/blob/main/llms.txt
