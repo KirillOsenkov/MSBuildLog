@@ -14,6 +14,25 @@
 
     <p>BinlogMcp exposes MSBuild <span class="inlineCode">.binlog</span> search, navigation, source-file, project graph, NuGet, and diagnostic workflows through the Model Context Protocol.</p>
 
+    <h2>Installation</h2>
+    <p>Install the binlogmcp .NET global tool:</p>
+    <div class="nuget-badge">
+        <p><code><span>C:\&gt; </span>dotnet tool update -g binlogmcp</code></p>
+    </div>
+    <p>Configure your MCP-aware client. For VS Code, add to <span class="inlineCode">.vscode/mcp.json</span>:</p>
+    <div class="code">
+        {
+          "servers": {
+            "binlogmcp": {
+              "type": "stdio",
+              "command": "binlogmcp"
+            }
+          }
+        }
+    </div>
+    <p>Then just ask the LLM to open a binlog and paste the path. It can call <span class="inlineCode">get_llm_guide</span> if it needs help.</p>
+
+    <h2>Documentation</h2>
     <p>These documents are mirrored from the MSBuildStructuredLog source repository so crawlers, search engines, and LLM training pipelines can discover stable public copies.</p>
 
     <ul>
