@@ -174,6 +174,7 @@ button.secondary {
   box-shadow: inset 0 0 0 1px var(--grid);
 }
 button.secondary:hover { background: #f0f3f7; }
+[data-theme="dark"] button.secondary:hover { background: #242b36; }
 .theme-toggle { background: var(--accent3); }
 .theme-toggle:hover { background: #6129d4; }
 
@@ -202,11 +203,6 @@ footer {
     </div>
   </fieldset>
 
-  <fieldset>
-    <legend>Chart Mode</legend>
-    <label><input type="radio" name="mode" value="daily" checked> Daily (line)</label>
-    <label><input type="radio" name="mode" value="monthly"> Monthly (stacked bars)</label>
-  </fieldset>
 
   <div style="display:flex;flex-direction:column;gap:.5rem;">
     <button id="btnRefresh" title="Refetch release data">Refresh</button>
@@ -238,6 +234,7 @@ footer {
   const statusEl = document.getElementById('status');
   const legendEl = document.getElementById('legend');
   const assetControls = document.getElementById('assetControls');
+  const chartWrap = document.getElementById('chartWrap');
 
   const btnRefresh = document.getElementById('btnRefresh');
   const btnExport = document.getElementById('btnExport');
@@ -347,9 +344,10 @@ footer {
     datasetsDaily = daily;
     datasetsMonthly = monthly;
 
-    // Determine ordering: RELEASES, .nupkg first, then others alpha
-    const others = Object.keys(daily).filter(t=> t!=='RELEASES' && t!=='.nupkg').sort();
-    datasetOrder = ['RELEASES','.nupkg', ...others];
+    // Determine ordering: RELEASES, .nupkg first (when present), then others alpha
+    const preferred = ['RELEASES','.nupkg'].filter(t=> daily[t]);
+    const others = Object.keys(daily).filter(t=> !preferred.includes(t)).sort();
+    datasetOrder = [...preferred, ...others];
   }
 
   function initColors(){
@@ -363,7 +361,8 @@ footer {
     assetControls.innerHTML = '';
     datasetOrder.forEach((type, idx)=>{
       const id = 'chk_' + type.replace(/[^a-zA-Z0-9]/g,'_');
-      const checked = (type === 'RELEASES' || type === '.nupkg');
+      const hasPreferred = datasetOrder.some(t=> t==='RELEASES' || t==='.nupkg');
+      const checked = hasPreferred ? (type === 'RELEASES' || type === '.nupkg') : idx === 0;
       const label = document.createElement('label');
       label.innerHTML = `<input type="checkbox" id="${id}" data-type="${type}" ${checked?'checked':''}> <span>${type}</span>`;
       assetControls.appendChild(label);
@@ -395,15 +394,6 @@ footer {
     });
   }
 
-  function getDisplaySeries(){
-    const active = getActiveTypes();
-    buildLegend(active);
-    const dailyMode = document.querySelector('input[name=mode][value=daily]').checked;
-    return dailyMode
-      ? active.map(t=>datasetsDaily[t])
-      : active.map(t=>datasetsMonthly[t]);
-  }
-
   function formatNumber(n){
     if(n >= 1_000_000) return (n/1_000_000).toFixed(1)+'M';
     if(n >= 1_000) return (n/1_000).toFixed(1)+'K';
@@ -411,8 +401,8 @@ footer {
   }
 
   function draw(){
-    const w = chart.width = chart.clientWidth * window.devicePixelRatio;
-    const h = chart.height = chart.clientHeight * window.devicePixelRatio;
+    chart.width = chart.clientWidth * window.devicePixelRatio;
+    chart.height = chart.clientHeight * window.devicePixelRatio;
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     ctx.clearRect(0,0,chart.clientWidth,chart.clientHeight);
     ctx.font = '11px '+css('--font-stack');
@@ -422,25 +412,32 @@ footer {
     const innerW = chart.clientWidth - margin.left - margin.right;
     const innerH = chart.clientHeight - margin.top - margin.bottom;
 
-    const seriesArr = getDisplaySeries();
-    if(seriesArr.length === 0 || seriesArr.every(a=>!a || !a.length)){
+    drawnDataPoints = [];
+
+    const active = getActiveTypes();
+    buildLegend(active);
+
+    // Build month -> stacked points (stacking order follows datasetOrder)
+    const monthMap = {};
+    active.forEach(type=>{
+      (datasetsMonthly[type]||[]).forEach(pt=>{
+        (monthMap[pt.label] ||= []).push(pt);
+      });
+    });
+    const months = Object.keys(monthMap).sort();
+
+    if(!months.length){
       ctx.fillStyle = css('--muted');
       ctx.fillText('No data to display.', margin.left + 10, margin.top + 20);
-      drawnDataPoints = [];
       return;
     }
 
-    const allPts = seriesArr.flat();
-    const minDate = Math.min(...allPts.map(p=>p.date.getTime()));
-    const maxDate = Math.max(...allPts.map(p=>p.date.getTime()));
-    const maxValue = Math.max(...allPts.map(p=>p.value));
-
-    const xScale = t => margin.left + ((t - minDate)/(maxDate - minDate || 1))*innerW;
+    // Scale by the tallest stacked bar, not the tallest single segment
+    const maxValue = Math.max(...months.map(m=> monthMap[m].reduce((sum,p)=> sum + p.value, 0)));
     const yScale = v => margin.top + innerH - (v/(maxValue||1))*innerH;
 
     // Grid
     ctx.strokeStyle = css('--grid');
-    ctx.lineWidth = 1;
     ctx.beginPath();
     const gridLines = 6;
     for(let i=0;i<=gridLines;i++){
@@ -460,86 +457,39 @@ footer {
       ctx.fillText(formatNumber(v), margin.left - 8, y);
     }
 
-    // X labels
-    const dailyMode = document.querySelector('input[name=mode][value=daily]').checked;
+    const band = innerW / months.length;
+    const barWidth = band * 0.6;
+
+    // X labels: one per month band, thinned to ~12, aligned with the bars
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    let ticks = 8;
-    if(!dailyMode){
-      ticks = Math.min(12, seriesArr[0].length || 12);
-    }
-    for(let i=0;i<=ticks;i++){
-      const t = minDate + ((maxDate - minDate)/ticks)*i;
-      const xd = xScale(t);
-      const d = new Date(t);
-      const label = dailyMode ? d.toISOString().slice(0,10) : fmtMonth(d);
+    const labelStep = Math.max(1, Math.ceil(months.length / 12));
+    months.forEach((m, mi)=>{
+      if(mi % labelStep) return;
+      const cx = margin.left + band*mi + band/2;
       ctx.save();
-      ctx.translate(xd, chart.clientHeight - margin.bottom + 28);
+      ctx.translate(cx, chart.clientHeight - margin.bottom + 28);
       ctx.rotate(-0.6);
       ctx.fillStyle = css('--muted');
-      ctx.fillText(label,0,0);
+      ctx.fillText(m,0,0);
       ctx.restore();
-    }
+    });
 
-    drawnDataPoints = [];
-
-    if(!dailyMode){
-      // Stacked monthly bars
-      const active = getActiveTypes();
-      // Build month -> array of {value, source}
-      const monthMap = {};
-      active.forEach(type=>{
-        datasetsMonthly[type].forEach(pt=>{
-          const id = pt.label;
-          (monthMap[id] ||= []).push(pt);
-        });
+    // Stacked monthly bars
+    months.forEach((m, mi)=>{
+      const cx = margin.left + band*mi + band/2;
+      const x = cx - barWidth/2;
+      let stack = 0;
+      monthMap[m].forEach(p=>{
+        const h = (p.value / maxValue) * innerH;
+        const y = yScale(stack + p.value);
+        ctx.fillStyle = TYPE_COLORS[p.source] + 'DD';
+        roundedRect(ctx,x,y,barWidth,h,4);
+        ctx.fill();
+        drawnDataPoints.push({ x,y,w:barWidth,h,value:p.value,date:m,source:p.source });
+        stack += p.value;
       });
-      const months = Object.keys(monthMap).sort();
-      const band = innerW / months.length;
-      const barWidth = band * 0.6;
-      months.forEach((m, mi)=>{
-        const pts = monthMap[m];
-        const cx = margin.left + band*mi + band/2;
-        let stack = 0;
-        pts.forEach(p=>{
-          const h = (p.value / maxValue) * innerH;
-          const x = cx - barWidth/2;
-          const y = yScale(stack + p.value);
-          ctx.fillStyle = TYPE_COLORS[p.source] + 'DD';
-          roundedRect(ctx,x,y,barWidth,h,4);
-          ctx.fill();
-          drawnDataPoints.push({ x,y,w:barWidth,h,value:p.value,date:p.label,source:p.source });
-          stack += p.value;
-        });
-      });
-    } else {
-      // Lines per dataset
-      const active = getActiveTypes();
-      active.forEach(type=>{
-        const pts = datasetsDaily[type];
-        if(!pts.length) return;
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = TYPE_COLORS[type];
-        ctx.beginPath();
-        pts.forEach((p,i)=>{
-          const x = xScale(p.date.getTime());
-          const y = yScale(p.value);
-            if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-          drawnDataPoints.push({ x,y,r:4,value:p.value,date:fmtDate(p.date),source:type });
-        });
-        ctx.stroke();
-        if(pts.length <= 400){
-          ctx.fillStyle = TYPE_COLORS[type];
-          pts.forEach(p=>{
-            const x = xScale(p.date.getTime());
-            const y = yScale(p.value);
-            ctx.beginPath();
-            ctx.arc(x,y,3,0,Math.PI*2);
-            ctx.fill();
-          });
-        }
-      });
-    }
+    });
 
     // Axes
     ctx.strokeStyle = css('--muted');
@@ -553,7 +503,7 @@ footer {
     ctx.fillStyle = css('--muted');
     ctx.font = '12px '+css('--font-stack');
     ctx.textAlign = 'center';
-    ctx.fillText(dailyMode ? 'Daily Average Downloads' : 'Monthly Downloads (sum of daily averages)', chart.clientWidth/2, 8);
+    ctx.fillText('Monthly Downloads (sum of daily averages)', chart.clientWidth/2, 8);
   }
 
   function roundedRect(ctx,x,y,w,h,r){
@@ -594,30 +544,18 @@ footer {
   // Tooltip
   chart.addEventListener('mousemove', e=>{
     const rect = chart.getBoundingClientRect();
-    const x = (e.clientX - rect.left)*window.devicePixelRatio;
-    const y = (e.clientY - rect.top)*window.devicePixelRatio;
-    const dailyMode = document.querySelector('input[name=mode][value=daily]').checked;
-
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
     let hit = null;
-    if(!dailyMode){
-      for(const dp of drawnDataPoints){
-        if(x>=dp.x && x<=dp.x+dp.w && y>=dp.y && y<=dp.y+dp.h){ hit = dp; break; }
-      }
-    } else {
-      let minDist = Infinity;
-      for(const dp of drawnDataPoints){
-        const dx = x - dp.x, dy = y - dp.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if(dist < 16 && dist < minDist){
-          hit = dp; minDist = dist;
-        }
-      }
+    for(const dp of drawnDataPoints){
+      if(x>=dp.x && x<=dp.x+dp.w && y>=dp.y && y<=dp.y+dp.h){ hit = dp; break; }
     }
     if(hit){
+      const wrapRect = chartWrap.getBoundingClientRect();
       tooltip.style.opacity = 1;
-      tooltip.style.left = e.clientX + 'px';
-      tooltip.style.top = (e.clientY - 10) + 'px';
-      tooltip.innerHTML = `<strong>${hit.source}</strong><br>${hit.date}<br>${hit.value.toFixed(2)} downloads`;
+      tooltip.style.left = (e.clientX - wrapRect.left) + 'px';
+      tooltip.style.top = (e.clientY - wrapRect.top - 10) + 'px';
+      tooltip.innerHTML = `<strong>${hit.source}</strong><br>${hit.date}<br>${formatNumber(hit.value)} downloads`;
     } else {
       tooltip.style.opacity = 0;
     }
@@ -696,11 +634,10 @@ footer {
     const body = document.body;
     const cur = body.getAttribute('data-theme');
     body.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+    initColors(); // CSS vars changed with the theme; refresh cached series colors
     draw();
   });
 
-  // Mode change
-  document.querySelectorAll('input[name=mode]').forEach(r=> r.addEventListener('change', draw));
   btnRefresh.addEventListener('click', ()=> init(true));
   window.addEventListener('resize', ()=> draw(), { passive: true });
 
